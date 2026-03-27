@@ -4,6 +4,12 @@ const pool = require('../config/db');
 const { body, validationResult } = require('express-validator');
 
 // GET all products with optional filters
+// Returns a list of products, optionally filtered by search term (name or SKU), category, supplier, or low stock status.    
+// Uses parameterized queries to prevent SQL injection
+// With parameterisation, that input is treated as a plain string, never as executable SQL.  
+// Uses await to handle the fact that database queries take time. 
+// Await pauses execution until the query finishes, and catch handles anything that goes wrong.
+// Sending back a 500 error rather than crashing the whole server.
 router.get('/', async (req, res) => {
   try {
     const { search, category, supplier, low_stock } = req.query;
@@ -14,8 +20,8 @@ router.get('/', async (req, res) => {
       LEFT JOIN suppliers s ON p.supplier_id = s.supplier_id
       WHERE p.is_active = TRUE
     `;
-    const params = [];
 
+    const params = [];
     if (search) {
       params.push(`%${search}%`);
       query += ` AND (p.name ILIKE $${params.length} OR p.sku ILIKE $${params.length})`;
@@ -35,9 +41,13 @@ router.get('/', async (req, res) => {
     console.error(err.message);
     res.status(500).json({ error: 'Server error' });
   }
+
 });
 
-// GET single product
+// GET a single product
+// Returns the product with the specified ID, including category and supplier names. 
+// If the product is not found, it returns a 404 error. 
+// If there's a server error, it returns a 500 error.
 router.get('/:id', async (req, res) => {
   try {
     const result = await pool.query(
@@ -58,6 +68,13 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST create product
+// Creates a new product with the provided details.
+// Validates the input data to ensure required fields are present and correctly formatted. 
+// If validation fails, it returns a 400 error with details about the validation issues. 
+// If the SKU already exists, it returns a 400 error indicating the conflict. 
+// If there's a server error, it returns a 500 error.
+// Automatically returns the created product with its new ID and timestamps.
+// Also specific message will come up if SKU already exists, rather than a generic server error.
 router.post('/',
   [
     body('name').notEmpty().withMessage('Product name is required'),
@@ -97,6 +114,12 @@ router.post('/',
 );
 
 // PUT update product
+// Updates the product with the specified ID using the provided details.
+// Validates the input data to ensure required fields are present and correctly formatted. 
+// If validation fails, it returns a 400 error with details about the validation issues. 
+// If the product is not found, it returns a 404 error. 
+// If there's a server error, it returns a 500 error.
+// Automatically updates the updated_at timestamp and returns the updated product.
 router.put('/:id', async (req, res) => {
   try {
     const { name, description, sku, category_id, supplier_id,
@@ -124,6 +147,10 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE (soft delete)
+// Soft deletes the product with the specified ID by setting is_active to false.
+// The product still exists in the database but is excluded from active queries.
+// If the product is not found, it returns a 404 error. 
+// If there's a server error, it returns a 500 error.
 router.delete('/:id', async (req, res) => {
   try {
     await pool.query(
