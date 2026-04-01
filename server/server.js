@@ -11,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes (add these when have implemented)
+app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/products', require('./routes/products'));
 //app.use('/api/auth', require('./routes/auth'));
 //app.use('/api/suppliers', require('./routes/suppliers'));
