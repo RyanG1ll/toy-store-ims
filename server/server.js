@@ -10,13 +10,13 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// Routes (add these when have implemented)
+// Routes - these will be defined in separate files for better organization
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/categories', require('./routes/categories'));
 app.use('/api/suppliers', require('./routes/suppliers'));
+app.use('/api/orders', require('./routes/orders'));
 //app.use('/api/auth', require('./routes/auth'));
-//app.use('/api/orders', require('./routes/orders'));
 
 // Health check
 app.get('/api/health', (req, res) => {
