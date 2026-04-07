@@ -1,36 +1,52 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/layout/Navbar';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Products from './pages/Products/Products';
-import ProductModal from './pages/Products/ProductModal';
 import Suppliers from './pages/Suppliers/Suppliers';
 import Orders from './pages/Orders/Orders';
-import OrderModal from './pages/Orders/OrderModal';
+import Login from './pages/Auth/Login';
 import './styles/theme.css';
 
-function App() {
+// Protected route wrapper — redirects to login if not authenticated
+function ProtectedRoute({ children }) {
+  const { user, loading } = useAuth();
+  if (loading) return <p>Loading...</p>;
+  return user ? children : <Navigate to="/login" />;
+}
+
+function AppContent() {
+  const { user } = useAuth();
+
   return (
-    <Router>
+    <>
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
 
-      <Navbar />
+      {user && <Navbar />}
 
       <main id="main-content" role="main">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/suppliers" element={<Suppliers />} />
-          <Route path="/orders" element={<Orders />} /> 
-          <Route path="/products/new" element={<ProductModal />} />
-          <Route path="/products/:id/edit" element={<ProductModal />} />
-          <Route path="/orders/new" element={<OrderModal />} />
-          <Route path="/orders/:id/edit" element={<OrderModal />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/products" element={<ProtectedRoute><Products /></ProtectedRoute>} />
+          <Route path="/suppliers" element={<ProtectedRoute><Suppliers /></ProtectedRoute>} />
+          <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
         </Routes>
       </main>
-    </Router>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   );
 }
 

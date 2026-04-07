@@ -88,15 +88,20 @@ function OrderModal({ onClose, onSave }) {
     return Object.keys(newErrors).length === 0;
   };
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+
     try {
-      const payload = {
-        ...formData,
-        items: items.filter((item) => item.product_id && item.quantity && item.unit_cost),
-      };
-      await api.post('/orders', payload);
+      await api.post('/orders', {
+        supplier_id: formData.supplier_id,
+        notes: formData.notes,
+        items: items.map(item => ({
+          product_id: item.product_id,
+          quantity: item.quantity,
+          unit_cost: item.unit_cost
+        }))
+      });
       onSave();
     } catch (err) {
       console.error('Failed to create order', err);

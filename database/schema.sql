@@ -85,6 +85,17 @@ CREATE TABLE stock_movements (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE notifications (
+    notification_id SERIAL PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    severity VARCHAR(20) DEFAULT 'info' CHECK (severity IN ('info', 'warning', 'critical')),
+    title VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    link VARCHAR(255),
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Indexes for performance
 CREATE INDEX idx_products_supplier ON products(supplier_id);
 CREATE INDEX idx_products_category ON products(category_id);
@@ -92,3 +103,5 @@ CREATE INDEX idx_orders_supplier ON orders(supplier_id);
 CREATE INDEX idx_orders_status ON orders(status);
 CREATE INDEX idx_stock_movements_product ON stock_movements(product_id);
 CREATE INDEX idx_stock_movements_date ON stock_movements(created_at);
+CREATE INDEX idx_notifications_read ON notifications(is_read);
+CREATE INDEX idx_notifications_created ON notifications(created_at DESC);

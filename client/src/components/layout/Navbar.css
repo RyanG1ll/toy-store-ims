@@ -43,3 +43,36 @@
   outline: var(--focus-outline);
   outline-offset: var(--focus-offset);
 }
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-left: var(--spacing-lg);
+  padding-left: var(--spacing-lg);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.navbar-user span {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--font-size-sm);
+}
+
+.btn-logout {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+}
+
+.btn-logout:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-logout:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+}
