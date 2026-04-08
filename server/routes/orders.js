@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const { body, validationResult } = require('express-validator');
+const { createNotification } = require('../utils/notify');
 
 // GET all orders
 router.get('/', async (req, res) => {
@@ -105,6 +106,15 @@ router.post('/',
 
       await client.query('COMMIT');
 
+      // Auto-generate notification for new order
+      await createNotification(
+        'new_order',
+        'info',
+        'New Order Created',
+        `Order #${order.order_id} placed with supplier.`,
+        '/orders'
+      );
+
       res.status(201).json({ ...order, items });
     } catch (err) {
       await client.query('ROLLBACK');
@@ -169,7 +179,33 @@ router.put('/:id/status', async (req, res) => {
           [item.product_id, item.quantity, `Order #${req.params.id} delivered`]
         );
       }
+
+        // Check for low stock after delivery update
+        const lowStockCheck = await pool.query(
+          `SELECT name, quantity_in_stock, reorder_level FROM products 
+           WHERE is_active = TRUE AND quantity_in_stock <= reorder_level`
+        );
+        for (const product of lowStockCheck.rows) {
+          const severity = product.quantity_in_stock === 0 ? 'critical' : 'warning';
+          await createNotification(
+            'low_stock',
+            severity,
+            product.quantity_in_stock === 0 ? 'Out of Stock!' : 'Low Stock Warning',
+            `${product.name}: ${product.quantity_in_stock} units remaining (reorder level: ${product.reorder_level}).`,
+            '/products'
+          );
+        }
     }
+
+    // Auto-generate notification for status change
+    const severityMap = { confirmed: 'info', shipped: 'info', delivered: 'info', cancelled: 'warning' };
+    await createNotification(
+      'order_status',
+      severityMap[status] || 'info',
+      `Order ${status.charAt(0).toUpperCase() + status.slice(1)}`,
+      `Order #${req.params.id} has been ${status}.`,
+      '/orders'
+    );
 
     res.json(result.rows[0]);
   } catch (err) {

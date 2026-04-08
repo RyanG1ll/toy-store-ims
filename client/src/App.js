@@ -7,6 +7,7 @@ import Products from './pages/Products/Products';
 import Suppliers from './pages/Suppliers/Suppliers';
 import Orders from './pages/Orders/Orders';
 import Login from './pages/Auth/Login';
+import Notifications from './pages/Notifications/Notifications';
 import './styles/theme.css';
 
 // Protected route wrapper — redirects to login if not authenticated
@@ -34,6 +35,7 @@ function AppContent() {
           <Route path="/products" element={<ProtectedRoute><Products /></ProtectedRoute>} />
           <Route path="/suppliers" element={<ProtectedRoute><Suppliers /></ProtectedRoute>} />
           <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
         </Routes>
       </main>
     </>

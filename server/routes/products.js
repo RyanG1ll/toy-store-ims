@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const { body, validationResult } = require('express-validator');
+const { createNotification } = require('../utils/notify');
 
 // GET all products with optional filters
 // Returns a list of products, optionally filtered by search term (name or SKU), category, supplier, or low stock status.    
@@ -103,6 +104,15 @@ router.post('/',
          unit_price, cost_price, quantity_in_stock || 0,
          reorder_level || 10, reorder_quantity || 50, age_range]
       );
+      
+      await createNotification(
+      'new_product',
+      'info',
+      'New Product Added',
+      `"${result.rows[0].name}" has been added to inventory.`,
+      '/products'
+      );
+
       res.status(201).json(result.rows[0]);
     } catch (err) {
       if (err.code === '23505') {
@@ -140,6 +150,20 @@ router.put('/:id', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Product not found' });
     }
+
+    // Check if stock was updated to a low level
+    const updated = result.rows[0];
+    if (updated.quantity_in_stock <= updated.reorder_level) {
+      const severity = updated.quantity_in_stock === 0 ? 'critical' : 'warning';
+      await createNotification(
+        'low_stock',
+        severity,
+        updated.quantity_in_stock === 0 ? 'Out of Stock!' : 'Low Stock Warning',
+        `${updated.name}: ${updated.quantity_in_stock} units remaining (reorder level: ${updated.reorder_level}).`,
+        '/products'
+      );
+    }
+
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
