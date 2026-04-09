@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../config/db');
 const { body, validationResult } = require('express-validator');
 const { createNotification } = require('../utils/notify');
+const auth = require('../middleware/auth');
 
 // GET all products with optional filters
 // Returns a list of products, optionally filtered by search term (name or SKU), category, supplier, or low stock status.    
@@ -11,7 +12,7 @@ const { createNotification } = require('../utils/notify');
 // Uses await to handle the fact that database queries take time. 
 // Await pauses execution until the query finishes, and catch handles anything that goes wrong.
 // Sending back a 500 error rather than crashing the whole server.
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const { search, category, supplier, low_stock } = req.query;
     let query = `
@@ -49,7 +50,7 @@ router.get('/', async (req, res) => {
 // Returns the product with the specified ID, including category and supplier names. 
 // If the product is not found, it returns a 404 error. 
 // If there's a server error, it returns a 500 error.
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT p.*, c.name as category_name, s.name as supplier_name
@@ -76,7 +77,7 @@ router.get('/:id', async (req, res) => {
 // If there's a server error, it returns a 500 error.
 // Automatically returns the created product with its new ID and timestamps.
 // Also specific message will come up if SKU already exists, rather than a generic server error.
-router.post('/',
+router.post('/', auth,
   [
     body('name').notEmpty().withMessage('Product name is required'),
     body('sku').notEmpty().withMessage('SKU is required'),
@@ -106,12 +107,25 @@ router.post('/',
       );
       
       await createNotification(
-      'new_product',
-      'info',
-      'New Product Added',
-      `"${result.rows[0].name}" has been added to inventory.`,
-      '/products'
+        'new_product',
+        'info',
+        'New Product Added',
+        `"${result.rows[0].name}" has been added to inventory.`,
+        '/products'
       );
+
+      // Check if new product was added with low or zero stock
+      const newProduct = result.rows[0];
+      if (newProduct.quantity_in_stock <= newProduct.reorder_level) {
+        const severity = newProduct.quantity_in_stock === 0 ? 'critical' : 'warning';
+        await createNotification(
+          'low_stock',
+          severity,
+          newProduct.quantity_in_stock === 0 ? 'Out of Stock!' : 'Low Stock Warning',
+          `${newProduct.name}: ${newProduct.quantity_in_stock} units remaining (reorder level: ${newProduct.reorder_level}).`,
+          '/products'
+        );
+      }
 
       res.status(201).json(result.rows[0]);
     } catch (err) {
@@ -130,7 +144,7 @@ router.post('/',
 // If the product is not found, it returns a 404 error. 
 // If there's a server error, it returns a 500 error.
 // Automatically updates the updated_at timestamp and returns the updated product.
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   try {
     const { name, description, sku, category_id, supplier_id,
             unit_price, cost_price, quantity_in_stock,
@@ -175,7 +189,7 @@ router.put('/:id', async (req, res) => {
 // The product still exists in the database but is excluded from active queries.
 // If the product is not found, it returns a 404 error. 
 // If there's a server error, it returns a 500 error.
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     await pool.query(
       'UPDATE products SET is_active = FALSE WHERE product_id = $1',

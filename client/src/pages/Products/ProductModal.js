@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import api from '../../services/api';
 import './ProductModal.css';
+import Tooltip from '../../components/tooltip/ToolTip';
+import educationalContent from '../../data/educationalContent';
 
 function ProductModal({ product, onClose, onSave }) {
   const [formData, setFormData] = useState({
@@ -187,17 +189,20 @@ function ProductModal({ product, onClose, onSave }) {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="quantity_in_stock">Stock Quantity</label>
+              <label htmlFor="quantity_in_stock">
+                Stock Level <Tooltip content={educationalContent.stockMovement} /></label>
               <input id="quantity_in_stock" name="quantity_in_stock" type="number" min="0"
                      value={formData.quantity_in_stock} onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label htmlFor="reorder_level">Reorder Level</label>
+              <label htmlFor="reorder_level">
+                Reorder Level <Tooltip content={educationalContent.reorderPoint} /></label>
               <input id="reorder_level" name="reorder_level" type="number" min="0"
                      value={formData.reorder_level} onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label htmlFor="reorder_quantity">Reorder Quantity</label>
+              <label htmlFor="reorder_quantity">
+                Reorder Quantity <Tooltip content={educationalContent.reorderQuantity} /></label>
               <input id="reorder_quantity" name="reorder_quantity" type="number" min="0"
                      value={formData.reorder_quantity} onChange={handleChange} />
             </div>

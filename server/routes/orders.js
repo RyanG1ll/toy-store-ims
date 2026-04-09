@@ -3,9 +3,10 @@ const router = express.Router();
 const pool = require('../config/db');
 const { body, validationResult } = require('express-validator');
 const { createNotification } = require('../utils/notify');
+const auth = require('../middleware/auth');
 
 // GET all orders
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const { status } = req.query;
     let query = `
@@ -30,7 +31,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET single order with its items
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
   try {
     const order = await pool.query(
       `SELECT o.*, s.name as supplier_name
@@ -63,7 +64,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST create order with items
-router.post('/',
+router.post('/', auth,
   [
     body('supplier_id').notEmpty().withMessage('Supplier is required'),
     body('items').isArray({ min: 1 }).withMessage('At least one item is required'),
@@ -127,7 +128,7 @@ router.post('/',
 );
 
 // PUT update order status
-router.put('/:id/status', async (req, res) => {
+router.put('/:id/status', auth, async (req, res) => {
   try {
     const { status } = req.body;
     const validStatuses = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
@@ -215,7 +216,7 @@ router.put('/:id/status', async (req, res) => {
 });
 
 // DELETE order (only if pending)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     const order = await pool.query(
       'SELECT status FROM orders WHERE order_id = $1',
@@ -232,6 +233,22 @@ router.delete('/:id', async (req, res) => {
     await pool.query('DELETE FROM orders WHERE order_id = $1', [req.params.id]);
     res.json({ message: 'Order deleted' });
   } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// GET order status breakdown (for analytics chart)
+router.get('/analytics/status-breakdown', auth, async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT status, COUNT(*)::int as count
+      FROM orders
+      GROUP BY status
+      ORDER BY count DESC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Order analytics error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });

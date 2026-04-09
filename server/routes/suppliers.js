@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const { body, validationResult } = require('express-validator');
+const auth = require('../middleware/auth');
 
 // GET all suppliers
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const { search } = req.query;
     let query = 'SELECT * FROM suppliers WHERE is_active = TRUE';
@@ -25,7 +26,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET single supplier
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
   try {
     const result = await pool.query(
       'SELECT * FROM suppliers WHERE supplier_id = $1',
@@ -41,7 +42,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST create supplier
-router.post('/',
+router.post('/', auth,
   [
     body('name').notEmpty().withMessage('Supplier name is required'),
     body('email').optional().isEmail().withMessage('Valid email required'),
@@ -67,7 +68,7 @@ router.post('/',
 );
 
 // PUT update supplier
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   try {
     const { name, contact_name, email, phone, address, lead_time_days } = req.body;
     const result = await pool.query(
@@ -87,7 +88,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE (soft delete)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     await pool.query(
       'UPDATE suppliers SET is_active = FALSE WHERE supplier_id = $1',

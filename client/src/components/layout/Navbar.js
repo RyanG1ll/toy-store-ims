@@ -34,6 +34,7 @@ function Navbar() {
         <li><NavLink to="/products">Products</NavLink></li>
         <li><NavLink to="/suppliers">Suppliers</NavLink></li>
         <li><NavLink to="/orders">Orders</NavLink></li>
+        <li><NavLink to="/forecasting">Forecasting</NavLink></li>
         <li>
         <li>
           <NavLink to="/notifications" aria-label={`Messages${unreadCount > 0 ? `, ${unreadCount} unread` : ''}`}>

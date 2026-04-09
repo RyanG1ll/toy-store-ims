@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
+const auth = require('../middleware/auth');
 
 // GET all notifications (newest first, with optional filter)
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const { unread_only } = req.query;
     let query = 'SELECT * FROM notifications';
@@ -24,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET unread count (for the navbar bell)
-router.get('/unread-count', async (req, res) => {
+router.get('/unread-count', auth, async (req, res) => {
   try {
     const result = await pool.query(
       'SELECT COUNT(*) FROM notifications WHERE is_read = FALSE'
@@ -37,7 +38,7 @@ router.get('/unread-count', async (req, res) => {
 });
 
 // PUT mark single notification as read
-router.put('/:id/read', async (req, res) => {
+router.put('/:id/read', auth, async (req, res) => {
   try {
     const result = await pool.query(
       'UPDATE notifications SET is_read = TRUE WHERE notification_id = $1 RETURNING *',
@@ -54,7 +55,7 @@ router.put('/:id/read', async (req, res) => {
 });
 
 // PUT mark all as read
-router.put('/mark-all-read', async (req, res) => {
+router.put('/mark-all-read', auth, async (req, res) => {
   try {
     await pool.query('UPDATE notifications SET is_read = TRUE WHERE is_read = FALSE');
     res.json({ message: 'All notifications marked as read' });
@@ -65,7 +66,7 @@ router.put('/mark-all-read', async (req, res) => {
 });
 
 // DELETE single notification
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     const result = await pool.query(
       'DELETE FROM notifications WHERE notification_id = $1 RETURNING *',
@@ -82,7 +83,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 // DELETE clear all read notifications
-router.delete('/clear/read', async (req, res) => {
+router.delete('/clear/read', auth, async (req, res) => {
   try {
     await pool.query('DELETE FROM notifications WHERE is_read = TRUE');
     res.json({ message: 'Read notifications cleared' });

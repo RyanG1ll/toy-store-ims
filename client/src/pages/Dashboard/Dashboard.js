@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import './Dashboard.css';
+import Tooltip from '../../components/tooltip/ToolTip';
+import educationalContent from '../../data/educationalContent';
 
 // The Dashboard component fetches and displays key statistics about the inventory system
 // It shows total products, total suppliers, low stock items, and recent orders
@@ -58,7 +60,7 @@ function Dashboard() {
       {/* Low stock table */}
       {stats.lowStockItems.length > 0 && (
         <section aria-label="Low stock alerts">
-          <h2>Low Stock Alerts</h2>
+          <h2>Low Stock Alerts <Tooltip content={educationalContent.reorderPoint} /></h2>
           <table>
             <thead>
               <tr>
@@ -84,7 +86,7 @@ function Dashboard() {
 
       {/* Recent orders */}
       <section aria-label="Recent orders">
-        <h2>Recent Orders</h2>
+        <h2>Recent Orders <Tooltip content={educationalContent.leadTime} /></h2>
         {stats.recentOrders.length === 0 ? (
           <p>No orders yet.</p>
         ) : (

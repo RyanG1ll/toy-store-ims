@@ -1,0 +1,131 @@
+.forecasting-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.forecasting-header {
+  margin-bottom: 1.5rem;
+}
+
+.forecasting-header h1 {
+  margin: 0 0 0.25rem 0;
+}
+
+.forecasting-subtitle {
+  color: var(--text-secondary, #666);
+  font-size: 0.95rem;
+}
+
+.forecast-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.forecast-card {
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 10px;
+  background: var(--card-bg, #fff);
+  overflow: hidden;
+}
+
+.forecast-card-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color, #eee);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forecast-card-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.forecast-card-header .sku {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #999);
+}
+
+.stock-status {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.stock-status.healthy {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.stock-status.warning {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.stock-status.low {
+  background: #fce4ec;
+  color: #c62828;
+}
+
+.stock-status.out_of_stock {
+  background: #c62828;
+  color: white;
+}
+
+.forecast-card-body {
+  padding: 1rem;
+}
+
+.forecast-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color, #f0f0f0);
+}
+
+.forecast-metric:last-child {
+  border-bottom: none;
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #666);
+  display: flex;
+  align-items: center;
+}
+
+.metric-value {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.metric-value.highlight {
+  color: var(--primary-color, #4a90d9);
+}
+
+.metric-value.warning {
+  color: #e65100;
+}
+
+.metric-value.critical {
+  color: #c62828;
+}
+
+.forecast-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary, #999);
+  letter-spacing: 0.5px;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary, #999);
+}

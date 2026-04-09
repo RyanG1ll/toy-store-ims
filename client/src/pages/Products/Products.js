@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import ProductModal from './ProductModal';
 import './Products.css';
+import Tooltip from '../../components/tooltip/ToolTip';
+import educationalContent from '../../data/educationalContent';
 
 // The Products component displays a list of products with search, add, edit, and delete functionality.
 // It fetches products from the API and allows users to manage their inventory effectively.
@@ -84,7 +86,7 @@ function Products() {
   return (
     <div className="products-page">
       <div className="products-header">
-        <h1>Products</h1>
+        <h1>Products <Tooltip content={educationalContent.abcAnalysis} /></h1>
         <button className="btn btn-primary" onClick={handleAdd}>
           + Add Product
         </button>

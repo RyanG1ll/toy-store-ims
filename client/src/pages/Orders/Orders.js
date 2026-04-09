@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import OrderModal from './OrderModal';
 import './Orders.css';
+import Tooltip from '../../components/tooltip/ToolTip';
+import educationalContent from '../../data/educationalContent';
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -80,7 +82,7 @@ function Orders() {
   return (
     <div className="orders-page">
       <div className="orders-header">
-        <h1>Orders</h1>
+        <h1>Orders <Tooltip content={educationalContent.leadTime} /></h1>
         <button className="btn btn-primary" onClick={() => setShowModal(true)}>
           + New Order
         </button>

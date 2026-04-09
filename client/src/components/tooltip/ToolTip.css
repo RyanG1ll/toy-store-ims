@@ -1,0 +1,96 @@
+.tooltip-wrapper .tooltip-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
+
+.tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--primary-color, #4a90d9);
+  background: transparent;
+  color: var(--primary-color, #4a90d9);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.tooltip-trigger:hover {
+  background: var(--primary-color, #4a90d9);
+  color: white;
+}
+
+.tooltip-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 8px;
+  padding: 1.25rem;
+  width: 360px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.tooltip-header h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--primary-color, #4a90d9);
+}
+
+.tooltip-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-secondary, #999);
+  padding: 0;
+  line-height: 1;
+}
+
+.tooltip-short {
+  font-size: 0.9rem;
+  color: var(--text-primary, #333);
+  margin: 0 0 0.75rem 0;
+  font-weight: 500;
+}
+
+.tooltip-details {
+  margin-bottom: 0.5rem;
+}
+
+.tooltip-details summary {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-color, #4a90d9);
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+
+.tooltip-details p {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #555);
+  margin: 0.25rem 0 0 0;
+  line-height: 1.5;
+}
