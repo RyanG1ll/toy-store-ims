@@ -18,6 +18,7 @@ function Products() {
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [chartCategory, setChartCategory] = useState('all');
 
 // Fetch products from the API with optional search term
 // Created outside of useEffect to allow re-fetching after add/edit/delete operations
@@ -96,15 +97,31 @@ function Products() {
         </button>
       </div>
 
+      <div className="chart-filters" role="group" aria-label="Filter stock chart">
+        <select
+          value={chartCategory}
+          onChange={(e) => setChartCategory(e.target.value)}
+          aria-label="Filter chart by category"
+          className="chart-select"
+        >
+          <option value="all">All Categories</option>
+          {[...new Set(products.map(p => p.category_name).filter(Boolean))].map(cat => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+      </div>
+
       {products.length > 0 && (
         <div className="products-chart">
           <h2>Stock Levels Overview</h2>
-          <ResponsiveContainer width="100%" height={Math.max(200, products.length * 40)}>
-            <BarChart data={products.map(p => ({
-              name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name,
-              stock: p.quantity_in_stock,
-              reorder: p.reorder_level
-            }))} layout="vertical" margin={{ top: 5, right: 30, left: 100, bottom: 5 }}>
+          <ResponsiveContainer width="100%" height={Math.max(200, products.filter(p => chartCategory === 'all' || p.category_name === chartCategory).length * 40)}>
+            <BarChart data={products
+              .filter(p => chartCategory === 'all' || p.category_name === chartCategory)
+              .map(p => ({
+                name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name,
+                stock: p.quantity_in_stock,
+                reorder: p.reorder_level
+              }))} layout="vertical" margin={{ top: 5, right: 30, left: 100, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" />
               <YAxis type="category" dataKey="name" fontSize={12} width={95} />

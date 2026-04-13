@@ -23,6 +23,7 @@ function Dashboard() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [chartFilter, setChartFilter] = useState('all');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +62,21 @@ function Dashboard() {
         </div>
       </div>
 
+      <div className="chart-filters" role="group" aria-label="Filter charts">
+        {['all', 'stock', 'orders'].map((f) => (
+          <button
+            key={f}
+            className={`filter-btn ${chartFilter === f ? 'active' : ''}`}
+            onClick={() => setChartFilter(f)}
+            aria-pressed={chartFilter === f}
+          >
+            {f === 'all' ? 'All Charts' : f === 'stock' ? 'Stock Charts' : 'Order Charts'}
+          </button>
+        ))}
+      </div>
+
       <div className="dashboard-charts">
+        {(chartFilter === 'all' || chartFilter === 'stock') && (
         <div className="chart-card">
           <h2>
             Stock by Category
@@ -89,7 +104,9 @@ function Dashboard() {
             </ResponsiveContainer>
           ) : <p>No stock data yet.</p>}
         </div>
-
+        )}
+        
+        {(chartFilter === 'all' || chartFilter === 'orders') && (
         <div className="chart-card">
           <h2>
             Orders Over Time
@@ -108,6 +125,7 @@ function Dashboard() {
             </ResponsiveContainer>
           ) : <p>No order history yet.</p>}
         </div>
+        )}
 
         <div className="chart-card">
           <h2>
@@ -158,7 +176,7 @@ function Dashboard() {
             </thead>
             <tbody>
               {stats.lowStockItems.map((item) => (
-                <tr key={item.product_id}>
+                <tr key={item.product_id} className="low-stock-row">
                   <td>{item.name}</td>
                   <td>{item.sku}</td>
                   <td>{item.quantity_in_stock}</td>

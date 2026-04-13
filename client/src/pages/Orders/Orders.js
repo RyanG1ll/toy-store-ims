@@ -13,13 +13,14 @@ function Orders() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [statusFilter, setStatusFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const filteredOrders = statusFilter === 'all' 
+  ? orders 
+  : orders.filter(o => o.status === statusFilter);
 
   const fetchOrders = async () => {
     try {
-      const response = await api.get('/orders', {
-        params: statusFilter ? { status: statusFilter } : {},
-      });
+      const response = await api.get('/orders');
       setOrders(response.data);
       setLoading(false);
     } catch (err) {
@@ -31,7 +32,7 @@ function Orders() {
 
   useEffect(() => {
     fetchOrders();
-  }, [statusFilter]);
+  }, []);
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
@@ -91,6 +92,19 @@ function Orders() {
         </button>
       </div>
 
+      <div className="chart-filters" role="group" aria-label="Filter orders">
+        {['all', 'pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map((s) => (
+          <button
+            key={s}
+            className={`filter-btn ${statusFilter === s ? 'active' : ''}`}
+            onClick={() => setStatusFilter(s)}
+            aria-pressed={statusFilter === s}
+          >
+            {s.charAt(0).toUpperCase() + s.slice(1)}
+          </button>
+        ))}
+      </div>
+
       {orders.length > 0 && (
         <div className="orders-chart">
           <h2>Order Status Breakdown</h2>
@@ -133,22 +147,6 @@ function Orders() {
         </div>
       )}
 
-      <div className="filter-bar">
-        <label htmlFor="status-filter">Filter by status:</label>
-        <select
-          id="status-filter"
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="">All Orders</option>
-          <option value="pending">Pending</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="shipped">Shipped</option>
-          <option value="delivered">Delivered</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-      </div>
-
       <table>
         <thead>
           <tr>
@@ -162,10 +160,10 @@ function Orders() {
           </tr>
         </thead>
         <tbody>
-          {orders.length === 0 ? (
+          {filteredOrders.length === 0 ? (
             <tr><td colSpan="7">No orders found.</td></tr>
           ) : (
-            orders.map((order) => (
+            filteredOrders.map((order) => (
               <tr key={order.order_id}>
                 <td>{order.order_id}</td>
                 <td>{order.supplier_name}</td>
@@ -227,6 +225,8 @@ function Orders() {
 export default Orders;
 
 // Change after testing -
+// Have tester complain about the actions button messing up on delivered/cancelled orders change to removing it
+// Then replace with this
 // {/* <td className="actions">
 //   {order.status !== 'delivered' && order.status !== 'cancelled' && (
 //     <>

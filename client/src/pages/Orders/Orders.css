@@ -123,3 +123,25 @@
   margin: 0 0 1rem 0;
   font-size: 1.05rem;
 }
+
+.chart-filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.chart-filters .filter-btn {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 20px;
+  background: var(--card-bg, #fff);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.chart-filters .filter-btn.active {
+  background: var(--primary-color, #4a90d9);
+  color: white;
+  border-color: var(--primary-color, #4a90d9);
+}
