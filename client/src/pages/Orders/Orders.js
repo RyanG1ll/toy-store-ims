@@ -4,6 +4,9 @@ import OrderModal from './OrderModal';
 import './Orders.css';
 import Tooltip from '../../components/tooltip/ToolTip';
 import educationalContent from '../../data/educationalContent';
+import {
+  PieChart, Pie, Cell, Tooltip as ChartTooltip, Legend, ResponsiveContainer
+} from 'recharts';
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -87,6 +90,48 @@ function Orders() {
           + New Order
         </button>
       </div>
+
+      {orders.length > 0 && (
+        <div className="orders-chart">
+          <h2>Order Status Breakdown</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={Object.entries(
+                  orders.reduce((acc, order) => {
+                    acc[order.status] = (acc[order.status] || 0) + 1;
+                    return acc;
+                  }, {})
+                ).map(([name, value]) => ({ name, value }))}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                label={false}
+              >
+                {Object.keys(
+                  orders.reduce((acc, order) => {
+                    acc[order.status] = true;
+                    return acc;
+                  }, {})
+                ).map((status, index) => {
+                  const colors = {
+                    pending: '#f9a825',
+                    confirmed: '#4a90d9',
+                    shipped: '#7cb342',
+                    delivered: '#2e7d32',
+                    cancelled: '#e53935'
+                  };
+                  return <Cell key={`cell-${index}`} fill={colors[status] || '#999'} />;
+                })}
+              </Pie>
+              <ChartTooltip formatter={(value, name) => [`${value} orders`, name]} />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      )}
 
       <div className="filter-bar">
         <label htmlFor="status-filter">Filter by status:</label>

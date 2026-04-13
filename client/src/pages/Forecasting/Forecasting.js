@@ -3,6 +3,10 @@ import api from '../../services/api';
 import Tooltip from '../../components/tooltip/ToolTip';
 import educationalContent from '../../data/educationalContent';
 import './Forecasting.css';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  Tooltip as ChartTooltip, ResponsiveContainer
+} from 'recharts';
 
 function Forecasting() {
   const [forecasts, setForecasts] = useState([]);
@@ -69,6 +73,21 @@ function Forecasting() {
 
               <div className="forecast-card-body">
                 <div className="forecast-section-title">Current Stock</div>
+
+                {f.monthly_demand_history && f.monthly_demand_history.length > 0 && (
+                  <div className="demand-chart">
+                    <div className="chart-label">Monthly Demand (last 6 months)</div>
+                    <ResponsiveContainer width="100%" height={140}>
+                      <BarChart data={f.monthly_demand_history} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" fontSize={11} />
+                        <YAxis fontSize={11} allowDecimals={false} />
+                        <ChartTooltip />
+                        <Bar dataKey="quantity" fill="#4a90d9" name="Units ordered" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
 
                 <div className="forecast-metric">
                   <span className="metric-label">Stock Level</span>

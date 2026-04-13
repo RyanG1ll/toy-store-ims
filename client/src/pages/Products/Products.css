@@ -108,3 +108,16 @@
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: var(--font-size-sm);
 }
+
+.products-chart {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.products-chart h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.05rem;
+}

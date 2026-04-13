@@ -4,6 +4,10 @@ import ProductModal from './ProductModal';
 import './Products.css';
 import Tooltip from '../../components/tooltip/ToolTip';
 import educationalContent from '../../data/educationalContent';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  Tooltip as ChartTooltip, Legend, ResponsiveContainer, ReferenceLine
+} from 'recharts';
 
 // The Products component displays a list of products with search, add, edit, and delete functionality.
 // It fetches products from the API and allows users to manage their inventory effectively.
@@ -91,6 +95,27 @@ function Products() {
           + Add Product
         </button>
       </div>
+
+      {products.length > 0 && (
+        <div className="products-chart">
+          <h2>Stock Levels Overview</h2>
+          <ResponsiveContainer width="100%" height={Math.max(200, products.length * 40)}>
+            <BarChart data={products.map(p => ({
+              name: p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name,
+              stock: p.quantity_in_stock,
+              reorder: p.reorder_level
+            }))} layout="vertical" margin={{ top: 5, right: 30, left: 100, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis type="category" dataKey="name" fontSize={12} width={95} />
+              <ChartTooltip />
+              <Legend />
+              <Bar dataKey="stock" fill="#4a90d9" name="Current Stock" />
+              <Bar dataKey="reorder" fill="#e53935" name="Reorder Level" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
 
       <form className="search-bar" onSubmit={handleSearch} role="search">
         <label htmlFor="product-search" className="sr-only">Search products</label>

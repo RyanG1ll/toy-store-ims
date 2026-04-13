@@ -110,3 +110,16 @@
   margin-top: var(--spacing-md);
   font-size: 1.1rem;
 }
+
+.orders-chart {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.orders-chart h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.05rem;
+}
