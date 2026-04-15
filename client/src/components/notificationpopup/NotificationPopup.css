@@ -1,0 +1,134 @@
+.notification-popup {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  width: 360px;
+  background: white;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  animation: slideIn 0.3s ease-out;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+
+.popup-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--primary-color, #4a90d9);
+}
+
+.popup-close {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: var(--text-secondary, #999);
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-close:hover {
+  background: #f0f0f0;
+  color: var(--text-primary, #333);
+}
+
+.popup-list {
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+
+.popup-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid transparent;
+}
+
+.popup-item.severity-info {
+  border-left-color: #4a90d9;
+}
+
+.popup-item.severity-warning {
+  border-left-color: #f9a825;
+  background: #fffdf0;
+}
+
+.popup-item.severity-critical {
+  border-left-color: #c62828;
+  background: #fff5f5;
+}
+
+.popup-item-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.popup-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.popup-item-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.popup-item-message {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #666);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.popup-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border-color, #eee);
+}
+
+.popup-view-all {
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--primary-color, #4a90d9);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.popup-view-all:hover {
+  opacity: 0.9;
+}

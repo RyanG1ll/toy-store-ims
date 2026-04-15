@@ -9,6 +9,7 @@ import Orders from './pages/Orders/Orders';
 import Login from './pages/Auth/Login';
 import Notifications from './pages/Notifications/Notifications';
 import Forecasting from './pages/Forecasting/Forecasting';
+import NotificationPopup from './components/notificationpopup/NotificationPopup';
 import './styles/theme.css';
 
 // Protected route wrapper — redirects to login if not authenticated
@@ -28,6 +29,7 @@ function AppContent() {
       </a>
 
       {user && <Navbar />}
+      {user && <NotificationPopup />}
 
       <main id="main-content" role="main">
         <Routes>
