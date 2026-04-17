@@ -1,0 +1,65 @@
+/* filters.css — shared styling for filter button groups
+   Import this in Dashboard, Products, and Orders, OR paste into theme.css.
+*/
+
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0 20px;
+}
+
+/* Unselected filter button — visible with border + readable text */
+.filter-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--primary, #4a90d9);
+  border-radius: 20px;
+  background: var(--card-bg, #ffffff);
+  color: var(--primary, #4a90d9);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.filter-btn:hover {
+  background: rgba(74, 144, 217, 0.1);
+}
+
+/* Selected / active state */
+.filter-btn.active,
+.filter-btn[aria-pressed="true"] {
+  background: var(--primary, #4a90d9);
+  color: #ffffff;
+  border-color: var(--primary, #4a90d9);
+}
+
+.filter-btn:focus-visible {
+  outline: 3px solid var(--primary, #4a90d9);
+  outline-offset: 2px;
+}
+
+/* Dark theme */
+[data-theme="dark"] .filter-btn {
+  background: #2a2a2a;
+  color: #5aa0e6;
+  border-color: #5aa0e6;
+}
+[data-theme="dark"] .filter-btn:hover {
+  background: rgba(90, 160, 230, 0.15);
+}
+[data-theme="dark"] .filter-btn.active {
+  background: #5aa0e6;
+  color: #000;
+}
+
+/* High contrast */
+[data-theme="high-contrast"] .filter-btn {
+  background: #000;
+  color: #ffff00;
+  border: 2px solid #ffff00;
+}
+[data-theme="high-contrast"] .filter-btn.active {
+  background: #ffff00;
+  color: #000;
+}

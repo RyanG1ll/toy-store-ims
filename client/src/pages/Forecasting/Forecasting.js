@@ -3,14 +3,17 @@ import api from '../../services/api';
 import Tooltip from '../../components/tooltip/ToolTip';
 import educationalContent from '../../data/educationalContent';
 import './Forecasting.css';
+import '../../styles/filters.css';  
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip as ChartTooltip, ResponsiveContainer
 } from 'recharts';
+import { useAccessibility } from '../../context/AccessibilityContext';
 
 function Forecasting() {
   const [forecasts, setForecasts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { reducedMotion } = useAccessibility();
 
   useEffect(() => {
     const fetchForecasts = async () => {
@@ -83,7 +86,7 @@ function Forecasting() {
                         <XAxis dataKey="month" fontSize={11} />
                         <YAxis fontSize={11} allowDecimals={false} />
                         <ChartTooltip />
-                        <Bar dataKey="quantity" fill="#4a90d9" name="Units ordered" />
+                        <Bar dataKey="quantity" fill="#4a90d9" name="Units ordered" isAnimationActive={!reducedMotion} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>

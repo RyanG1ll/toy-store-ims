@@ -7,11 +7,13 @@ import educationalContent from '../../data/educationalContent';
 import {
   PieChart, Pie, Cell, Tooltip as ChartTooltip, Legend, ResponsiveContainer
 } from 'recharts';
+import { useAccessibility } from '../../context/AccessibilityContext';
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { reducedMotion } = useAccessibility();
   const [showModal, setShowModal] = useState(false);
   const [statusFilter, setStatusFilter] = useState('all');
   const filteredOrders = statusFilter === 'all' 
@@ -123,6 +125,7 @@ function Orders() {
                 cy="50%"
                 outerRadius={80}
                 label={false}
+                isAnimationActive={!reducedMotion}
               >
                 {Object.keys(
                   orders.reduce((acc, order) => {

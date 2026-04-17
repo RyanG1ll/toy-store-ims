@@ -8,6 +8,8 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip as ChartTooltip, Legend, ResponsiveContainer, ReferenceLine
 } from 'recharts';
+import '../../styles/filters.css'; 
+import { useAccessibility } from '../../context/AccessibilityContext';
 
 // The Products component displays a list of products with search, add, edit, and delete functionality.
 // It fetches products from the API and allows users to manage their inventory effectively.
@@ -19,6 +21,7 @@ function Products() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [chartCategory, setChartCategory] = useState('all');
+  const { reducedMotion } = useAccessibility();
 
 // Fetch products from the API with optional search term
 // Created outside of useEffect to allow re-fetching after add/edit/delete operations
@@ -127,8 +130,8 @@ function Products() {
               <YAxis type="category" dataKey="name" fontSize={12} width={95} />
               <ChartTooltip />
               <Legend />
-              <Bar dataKey="stock" fill="#4a90d9" name="Current Stock" />
-              <Bar dataKey="reorder" fill="#e53935" name="Reorder Level" />
+              <Bar dataKey="stock" fill="#4a90d9" name="Current Stock" isAnimationActive={!reducedMotion}/>
+              <Bar dataKey="reorder" fill="#e53935" name="Reorder Level" isAnimationActive={!reducedMotion} />
             </BarChart>
           </ResponsiveContainer>
         </div>

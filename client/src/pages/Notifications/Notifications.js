@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import './Notifications.css';
+import '../../styles/filters.css'; 
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);

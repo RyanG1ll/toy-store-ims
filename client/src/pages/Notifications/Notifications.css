@@ -1,6 +1,7 @@
 .notifications-page {
   max-width: 800px;
   margin: 0 auto;
+  padding: var(--spacing-xl, 2rem);
 }
 
 .notifications-header {
@@ -14,6 +15,7 @@
 
 .notifications-header h1 {
   margin: 0;
+  color: var(--text, #222);
 }
 
 .notifications-actions {
@@ -26,12 +28,13 @@
   border: 1px solid var(--border-color, #ddd);
   border-radius: 6px;
   background: var(--card-bg, #fff);
+  color: var(--text, #222);
   cursor: pointer;
   font-size: 0.85rem;
 }
 
 .notifications-actions button:hover {
-  background: var(--hover-bg, #f5f5f5);
+  background: rgba(74, 144, 217, 0.08);
 }
 
 .notifications-filters {
@@ -40,27 +43,13 @@
   margin-bottom: 1rem;
 }
 
-.filter-btn {
-  padding: 0.4rem 0.8rem;
-  border: 1px solid var(--border-color, #ddd);
-  border-radius: 20px;
-  background: var(--card-bg, #fff);
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.filter-btn.active {
-  background: var(--primary-color, #4a90d9);
-  color: white;
-  border-color: var(--primary-color, #4a90d9);
-}
-
 .notification-list {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
+/* Each notification card */
 .notification-item {
   display: flex;
   align-items: flex-start;
@@ -74,14 +63,15 @@
 }
 
 .notification-item:hover {
-  background: var(--hover-bg, #f5f5f5);
+  background: rgba(74, 144, 217, 0.05);
 }
 
 .notification-item.unread {
-  border-left: 4px solid var(--primary-color, #4a90d9);
-  background: #f0f7ff;
+  border-left: 4px solid var(--primary, #4a90d9);
+  background: var(--notif-unread-bg, #f0f7ff);
 }
 
+/* Icon circles */
 .notification-icon {
   font-size: 1.5rem;
   flex-shrink: 0;
@@ -93,18 +83,11 @@
   border-radius: 50%;
 }
 
-.notification-icon.info {
-  background: #e3f2fd;
-}
+.notification-icon.info    { background: var(--notif-icon-info, #e3f2fd); }
+.notification-icon.warning  { background: var(--notif-icon-warning, #fff3e0); }
+.notification-icon.critical { background: var(--notif-icon-critical, #fce4ec); }
 
-.notification-icon.warning {
-  background: #fff3e0;
-}
-
-.notification-icon.critical {
-  background: #fce4ec;
-}
-
+/* Text content */
 .notification-content {
   flex: 1;
 }
@@ -112,23 +95,25 @@
 .notification-title {
   font-weight: 600;
   margin-bottom: 0.25rem;
+  color: var(--text, #222);
 }
 
 .notification-message {
-  color: var(--text-secondary, #666);
+  color: var(--muted, #666);
   font-size: 0.9rem;
   margin-bottom: 0.25rem;
 }
 
 .notification-time {
-  color: var(--text-secondary, #999);
+  color: var(--muted, #999);
   font-size: 0.8rem;
 }
 
+/* Dismiss X button */
 .notification-dismiss {
-  background: none;
-  border: none;
-  color: var(--text-secondary, #999);
+  background: none !important;
+  border: none !important;
+  color: var(--muted, #999);
   cursor: pointer;
   font-size: 1.2rem;
   padding: 0.25rem;
@@ -136,14 +121,15 @@
 }
 
 .notification-dismiss:hover {
-  background: var(--hover-bg, #f0f0f0);
-  color: var(--text-primary, #333);
+  background: rgba(0, 0, 0, 0.08) !important;
+  color: var(--text, #333);
 }
 
+/* Empty state */
 .empty-notifications {
   text-align: center;
   padding: 3rem;
-  color: var(--text-secondary, #999);
+  color: var(--muted, #999);
 }
 
 .empty-notifications .empty-icon {
@@ -151,6 +137,7 @@
   margin-bottom: 1rem;
 }
 
+/* Severity badges */
 .severity-badge {
   font-size: 0.75rem;
   padding: 0.15rem 0.5rem;
@@ -160,17 +147,92 @@
   margin-left: 0.5rem;
 }
 
-.severity-badge.critical {
-  background: #fce4ec;
-  color: #c62828;
+.severity-badge.critical { background: #fce4ec; color: #c62828; }
+.severity-badge.warning  { background: #fff3e0; color: #e65100; }
+.severity-badge.info     { background: #e3f2fd; color: #1565c0; }
+
+/* ==========================================================================
+   DARK THEME overrides
+   ========================================================================== */
+[data-theme="dark"] .notification-item {
+  background: var(--card-bg, #232731);
+  border-color: var(--border-color, #383d47);
 }
 
-.severity-badge.warning {
-  background: #fff3e0;
-  color: #e65100;
+[data-theme="dark"] .notification-item.unread {
+  background: #1e2a3a;
 }
 
-.severity-badge.info {
-  background: #e3f2fd;
-  color: #1565c0;
+[data-theme="dark"] .notification-item:hover {
+  background: rgba(90, 160, 230, 0.1);
+}
+
+[data-theme="dark"] .notification-title {
+  color: #f0f0f0;
+}
+
+[data-theme="dark"] .notification-message {
+  color: #b0b8c4;
+}
+
+[data-theme="dark"] .notification-time {
+  color: #8a929e;
+}
+
+[data-theme="dark"] .notification-dismiss {
+  color: #8a929e;
+}
+
+[data-theme="dark"] .notification-icon.info    { background: #1a2e4a; }
+[data-theme="dark"] .notification-icon.warning  { background: #3d2e1a; }
+[data-theme="dark"] .notification-icon.critical { background: #3d1a22; }
+
+[data-theme="dark"] .severity-badge.critical { background: #5a1e24; color: #f5a9b1; }
+[data-theme="dark"] .severity-badge.warning  { background: #5a3a1a; color: #ffd699; }
+[data-theme="dark"] .severity-badge.info     { background: #1a2e5a; color: #a8c8ff; }
+
+[data-theme="dark"] .notifications-actions button {
+  background: var(--card-bg, #232731);
+  color: #f0f0f0;
+  border-color: var(--border-color, #444);
+}
+
+/* ==========================================================================
+   HIGH CONTRAST overrides
+   ========================================================================== */
+[data-theme="high-contrast"] .notification-item {
+  background: #000;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+[data-theme="high-contrast"] .notification-item.unread {
+  background: #000;
+  border-left: 4px solid #ffff00;
+}
+
+[data-theme="high-contrast"] .notification-title {
+  color: #fff;
+}
+
+[data-theme="high-contrast"] .notification-message,
+[data-theme="high-contrast"] .notification-time {
+  color: #fff;
+}
+
+[data-theme="high-contrast"] .notification-icon.info,
+[data-theme="high-contrast"] .notification-icon.warning,
+[data-theme="high-contrast"] .notification-icon.critical {
+  background: #222;
+  border: 1px solid #fff;
+}
+
+[data-theme="high-contrast"] .severity-badge.critical { background: #000; color: #ff6666; border: 1px solid #ff6666; }
+[data-theme="high-contrast"] .severity-badge.warning  { background: #000; color: #ffff00; border: 1px solid #ffff00; }
+[data-theme="high-contrast"] .severity-badge.info     { background: #000; color: #66ccff; border: 1px solid #66ccff; }
+
+[data-theme="high-contrast"] .notifications-actions button {
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
 }

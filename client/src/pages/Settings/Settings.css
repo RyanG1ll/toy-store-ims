@@ -1,0 +1,146 @@
+/* Settings page — accessibility preferences
+   Matches actual Settings.js markup: .settings-option / .settings-options /
+   .settings-option-card / .settings-option-toggle / .reset-button
+*/
+
+.settings-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-xl, 2rem);
+}
+
+.settings-page h1 {
+  margin: 0 0 var(--spacing-sm, 0.5rem);
+  color: var(--text, #222);
+}
+
+.settings-subtitle {
+  color: var(--muted, #666);
+  margin-bottom: var(--spacing-xl, 2rem);
+  font-size: 1rem;
+}
+
+/* Card around each section */
+.settings-section {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: var(--radius, 10px);
+  padding: var(--spacing-lg, 1.5rem) var(--spacing-xl, 2rem);
+  margin-bottom: var(--spacing-lg, 1.5rem);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.06));
+}
+
+.settings-section h2 {
+  margin: 0 0 var(--spacing-xs, 0.25rem);
+  font-size: 1.2rem;
+  color: var(--text, #222);
+}
+
+.settings-help {
+  color: var(--muted, #666);
+  margin: 0 0 var(--spacing-md, 1rem);
+  font-size: 0.95rem;
+}
+
+/* Options container */
+.settings-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 0.5rem);
+}
+
+/* Each option row */
+.settings-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 0.75rem);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  background: var(--bg, #f5f7fa);
+  color: var(--text, #222);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.settings-option:hover {
+  border-color: var(--primary, #4a90d9);
+  background: rgba(74, 144, 217, 0.05);
+}
+
+.settings-option input[type="radio"],
+.settings-option input[type="checkbox"] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--primary, #4a90d9);
+  flex-shrink: 0;
+}
+
+/* Highlight the currently-selected option */
+.settings-option:has(input:checked) {
+  background: rgba(74, 144, 217, 0.1);
+  border-color: var(--primary, #4a90d9);
+}
+
+/* Larger card-style options (theme chooser) */
+.settings-option-card,
+.settings-option-toggle {
+  align-items: flex-start;
+  padding: 1rem 1.25rem;
+}
+
+.option-label {
+  font-weight: 500;
+  color: var(--text, #222);
+}
+
+.option-description {
+  color: var(--muted, #666);
+  font-size: 0.88rem;
+  margin-top: 0.15rem;
+}
+
+/* Reset button */
+.reset-button {
+  background: transparent;
+  color: var(--danger, #e74c3c);
+  border: 1px solid var(--danger, #e74c3c);
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+.reset-button:hover {
+  background: var(--danger, #e74c3c);
+  color: #fff;
+}
+
+/* Dark theme */
+[data-theme="dark"] .settings-option {
+  background: #2a2f3a;
+  border-color: #444b57;
+}
+[data-theme="dark"] .settings-option:hover {
+  background: rgba(90, 160, 230, 0.1);
+}
+[data-theme="dark"] .settings-option:has(input:checked) {
+  background: rgba(90, 160, 230, 0.18);
+}
+
+/* High contrast */
+[data-theme="high-contrast"] .settings-section {
+  border: 2px solid #fff;
+}
+[data-theme="high-contrast"] .settings-option {
+  border: 1px solid #fff;
+  background: #000;
+  color: #fff;
+}
+[data-theme="high-contrast"] .settings-option:has(input:checked) {
+  background: #222;
+  outline: 2px solid #ffff00;
+}

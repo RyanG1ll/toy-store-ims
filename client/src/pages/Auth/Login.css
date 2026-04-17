@@ -1,59 +1,167 @@
+/* Login.css — sign-in / sign-up page */
+
 .login-page {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 60px);
-  background: var(--color-surface);
+  background: var(--bg, #f5f7fa);
+  padding: 20px;
 }
 
 .login-card {
-  background: var(--color-background);
-  padding: var(--spacing-xl);
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #d8dce3);
+  border-radius: var(--radius, 10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 44px 40px 36px;
   width: 100%;
   max-width: 400px;
 }
 
 .login-card h1 {
-  font-size: 1.75rem;
-  margin-bottom: var(--spacing-xs);
-  color: var(--color-text);
+  margin: 0 0 6px;
+  font-size: 1.7rem;
+  color: var(--text, #222);
+  text-align: center;
 }
 
 .login-subtitle {
-  color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  color: var(--muted, #666);
+  margin: 0 0 28px;
+  font-size: 0.95rem;
 }
 
-.btn-full {
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-card .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-card label {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text, #222);
+}
+
+.login-card input[type="text"],
+.login-card input[type="email"],
+.login-card input[type="password"] {
+  padding: 11px 14px;
+  border: 1px solid var(--border-color, #cfd4db);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--card-bg, #fff);
+  color: var(--text, #222);
+  font-size: 1rem;
   width: 100%;
-  padding: var(--spacing-md);
-  font-size: var(--font-size-base);
-  margin-top: var(--spacing-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
+.login-card input:focus {
+  outline: none;
+  border-color: var(--primary, #4a90d9);
+  box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.2);
+}
+
+/* Submit button */
+.login-card .btn-primary,
+.login-card .btn-full,
+.login-card button[type="submit"] {
+  margin-top: 6px;
+  padding: 12px;
+  background: var(--primary, #4a90d9);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s;
+}
+.login-card button[type="submit"]:hover {
+  background: var(--primary-hover, #3a7bb8);
+}
+
+/* Toggle text: "Don't have an account? Create one" */
 .login-toggle {
   text-align: center;
-  margin-top: var(--spacing-lg);
-  color: var(--color-text-secondary);
+  margin-top: 20px;
+  font-size: 0.95rem;
+  color: var(--muted, #666);
 }
 
+/* Make the link-button look like a text link, NOT a button */
 .link-button {
-  background: none;
-  border: none;
-  color: var(--color-primary);
-  cursor: pointer;
-  font-size: var(--font-size-base);
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0;
+  color: var(--primary, #4a90d9) !important;
+  font-size: 0.95rem;
+  font-weight: 500;
   text-decoration: underline;
-  padding: 0;
+  cursor: pointer;
 }
-
 .link-button:hover {
-  color: var(--color-primary-hover);
+  color: var(--primary-hover, #3a7bb8) !important;
+  background: none !important;
 }
 
-.link-button:focus-visible {
-  outline: var(--focus-outline);
-  outline-offset: var(--focus-offset);
+/* Error message */
+.error-message {
+  background: #fde8e8;
+  color: #9b1c1c;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid #f8b4b4;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+/* Dark theme */
+[data-theme="dark"] .login-card {
+  background: var(--card-bg, #232731);
+  border-color: var(--border-color, #383d47);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+[data-theme="dark"] .login-card input[type="text"],
+[data-theme="dark"] .login-card input[type="email"],
+[data-theme="dark"] .login-card input[type="password"] {
+  background: #1e2230;
+  border-color: #444b57;
+  color: #f0f0f0;
+}
+[data-theme="dark"] .error-message {
+  background: #4a1e24;
+  border-color: #7a2e34;
+  color: #f5b5bb;
+}
+
+/* High contrast */
+[data-theme="high-contrast"] .login-card {
+  background: #000;
+  border: 2px solid #fff;
+}
+[data-theme="high-contrast"] .login-card input {
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+}
+[data-theme="high-contrast"] .login-card button[type="submit"] {
+  background: #ffff00;
+  color: #000;
+  border: 2px solid #fff;
+}
+[data-theme="high-contrast"] .link-button {
+  color: #ffff00 !important;
 }

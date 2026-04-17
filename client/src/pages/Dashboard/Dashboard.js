@@ -3,8 +3,9 @@ import api from '../../services/api';
 import './Dashboard.css';
 import Tooltip from '../../components/tooltip/ToolTip';
 import educationalContent from '../../data/educationalContent';
+import { useAccessibility } from '../../context/AccessibilityContext';
 import {
-  PieChart, Pie, Cell, BarChart, Bar, LineChart, Line,
+  PieChart, Pie, Cell, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip as ChartTooltip, Legend, ResponsiveContainer
 } from 'recharts';
 
@@ -24,20 +25,21 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [chartFilter, setChartFilter] = useState('all');
+  const { reducedMotion } = useAccessibility();
 
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            const response = await api.get('/dashboard');
-            setStats(response.data);
-            setLoading(false);
-        } catch (err) {
-            console.error(err);
-            setError('Failed to load dashboard data');
-            setLoading(false);
-        }
+      try {
+        const response = await api.get('/dashboard');
+        setStats(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load dashboard data');
+        setLoading(false);
+      }
     };
-    fetchData(); 
+    fetchData();
   }, []);
 
   if (loading) return <p>Loading dashboard...</p>;
@@ -77,54 +79,55 @@ function Dashboard() {
 
       <div className="dashboard-charts">
         {(chartFilter === 'all' || chartFilter === 'stock') && (
-        <div className="chart-card">
-          <h2>
-            Stock by Category
-            <Tooltip content={educationalContent.abcAnalysis} />
-          </h2>
-          {stats.stockByCategory && stats.stockByCategory.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={stats.stockByCategory}
-                  dataKey="total_stock"
-                  nameKey="category"
-                  cx="50%"
-                  cy="45%"
-                  outerRadius={80}
-                  label={false}
-                >
-                  {stats.stockByCategory.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={['#4a90d9', '#7cb342', '#f9a825', '#e53935', '#8e24aa', '#00897b', '#fb8c00', '#3949ab'][index % 8]} />
-                  ))}
-                </Pie>
-                <ChartTooltip formatter={(value, name) => [`${value} units`, name]} />
-                <Legend verticalAlign="bottom" height={60} wrapperStyle={{ fontSize: '0.8rem' }} />
-              </PieChart>
-            </ResponsiveContainer>
-          ) : <p>No stock data yet.</p>}
-        </div>
+          <div className="chart-card">
+            <h2>
+              Stock by Category
+              <Tooltip content={educationalContent.abcAnalysis} />
+            </h2>
+            {stats.stockByCategory && stats.stockByCategory.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={stats.stockByCategory}
+                    dataKey="total_stock"
+                    nameKey="category"
+                    cx="50%"
+                    cy="45%"
+                    outerRadius={80}
+                    label={false}
+                    isAnimationActive={!reducedMotion}
+                  >
+                    {stats.stockByCategory.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={['#4a90d9', '#7cb342', '#f9a825', '#e53935', '#8e24aa', '#00897b', '#fb8c00', '#3949ab'][index % 8]} />
+                    ))}
+                  </Pie>
+                  <ChartTooltip formatter={(value, name) => [`${value} units`, name]} />
+                  <Legend verticalAlign="bottom" height={60} wrapperStyle={{ fontSize: '0.8rem' }} />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : <p>No stock data yet.</p>}
+          </div>
         )}
-        
+
         {(chartFilter === 'all' || chartFilter === 'orders') && (
-        <div className="chart-card">
-          <h2>
-            Orders Over Time
-            <Tooltip content={educationalContent.demandForecasting} />
-          </h2>
-          {stats.ordersOverTime && stats.ordersOverTime.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={stats.ordersOverTime} margin={{ top: 20, right: 20, left: 0, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis allowDecimals={false} />
-                <ChartTooltip />
-                <Legend />
-                <Bar dataKey="order_count" fill="#4a90d9" name="Orders" />
-              </BarChart>
-            </ResponsiveContainer>
-          ) : <p>No order history yet.</p>}
-        </div>
+          <div className="chart-card">
+            <h2>
+              Orders Over Time
+              <Tooltip content={educationalContent.demandForecasting} />
+            </h2>
+            {stats.ordersOverTime && stats.ordersOverTime.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={stats.ordersOverTime} margin={{ top: 20, right: 20, left: 0, bottom: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis allowDecimals={false} />
+                  <ChartTooltip />
+                  <Legend />
+                  <Bar dataKey="order_count" fill="#4a90d9" name="Orders" isAnimationActive={!reducedMotion} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : <p>No order history yet.</p>}
+          </div>
         )}
 
         <div className="chart-card">
@@ -148,6 +151,7 @@ function Dashboard() {
                   innerRadius={50}
                   outerRadius={80}
                   label={false}
+                  isAnimationActive={!reducedMotion}
                 >
                   <Cell fill="#2e7d32" />
                   <Cell fill="#f9a825" />

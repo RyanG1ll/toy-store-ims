@@ -11,6 +11,8 @@ import Notifications from './pages/Notifications/Notifications';
 import Forecasting from './pages/Forecasting/Forecasting';
 import NotificationPopup from './components/notificationpopup/NotificationPopup';
 import './styles/theme.css';
+import { AccessibilityProvider } from './context/AccessibilityContext';
+import Settings from './pages/Settings/Settings';
 
 // Protected route wrapper — redirects to login if not authenticated
 function ProtectedRoute({ children }) {
@@ -40,6 +42,7 @@ function AppContent() {
           <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
           <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
           <Route path="/forecasting" element={<ProtectedRoute><Forecasting /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         </Routes>
       </main>
     </>
@@ -48,11 +51,13 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    </AuthProvider>
+    <AccessibilityProvider>
+       <AuthProvider>
+          <Router>
+            <AppContent />
+          </Router>
+       </AuthProvider>
+    </AccessibilityProvider>
   );
 }
 

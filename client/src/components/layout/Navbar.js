@@ -45,6 +45,7 @@ function Navbar() {
           </NavLink>
         </li>
         </li>
+        <li><NavLink to="/settings">Settings</NavLink></li>
       </ul>
       <div className="nav-user">
         <span className="nav-username">{user?.username}</span>
