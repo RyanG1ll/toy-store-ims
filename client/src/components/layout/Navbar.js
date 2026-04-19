@@ -36,14 +36,12 @@ function Navbar() {
         <li><NavLink to="/orders">Orders</NavLink></li>
         <li><NavLink to="/forecasting">Forecasting</NavLink></li>
         <li>
-        <li>
           <NavLink to="/notifications" aria-label={`Messages${unreadCount > 0 ? `, ${unreadCount} unread` : ''}`}>
             Messages
             {unreadCount > 0 && (
               <span className="notification-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
             )}
           </NavLink>
-        </li>
         </li>
         <li><NavLink to="/settings">Settings</NavLink></li>
       </ul>

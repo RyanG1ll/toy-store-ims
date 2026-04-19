@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--primary-color, #2c3e50);
+  background: #2b5f9e;
   padding: 0 2rem;
   height: 60px;
   color: white;
@@ -13,6 +13,11 @@
   text-decoration: none;
   font-size: 1.3rem;
   font-weight: 700;
+}
+
+.nav-brand a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .nav-links {
@@ -29,7 +34,7 @@
 }
 
 .nav-links a {
-  color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
   text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -42,6 +47,30 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
+.nav-links a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+/* This is the same as the above hover/active styles removing the underline */
+/* .nav-links a:hover,
+.nav-links a.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  text-decoration: none;
+}
+ 
+.nav-brand a:hover {
+  text-decoration: none;
+} */
+
+.nav-logout:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 .nav-user {
   display: flex;
   align-items: center;
@@ -49,7 +78,7 @@
 }
 
 .nav-username {
-  color: rgba(255, 255, 255, 0.9);
+  color: #ffffff;
   font-size: 0.9rem;
 }
 

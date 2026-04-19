@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import '../Products/ProductModal.css';
 import './Orders.css';
-import Orders from './Orders';
+import useFocusTrap from '../../hooks/useFocusTrap';
+import { useAnnounce } from '../../components/LiveAnnouncer';
 
 function OrderModal({ onClose, onSave }) {
   const [suppliers, setSuppliers] = useState([]);
@@ -14,7 +15,10 @@ function OrderModal({ onClose, onSave }) {
   });
   const [items, setItems] = useState([{ product_id: '', quantity: '', unit_cost: '' }]);
   const [errors, setErrors] = useState({});
-  const modalRef = useRef(null);
+
+  // Focus trap: traps Tab inside the modal and returns focus on close
+  const trapRef = useFocusTrap(onClose);
+  const announce = useAnnounce();
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -30,18 +34,6 @@ function OrderModal({ onClose, onSave }) {
       }
     };
     fetchOptions();
-  }, []);
-
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
-
-  useEffect(() => {
-    if (modalRef.current) modalRef.current.focus();
   }, []);
 
   const handleChange = (e) => {
@@ -66,11 +58,13 @@ function OrderModal({ onClose, onSave }) {
 
   const addItem = () => {
     setItems([...items, { product_id: '', quantity: '', unit_cost: '' }]);
+    announce('New item row added');
   };
 
   const removeItem = (index) => {
     if (items.length === 1) return;
     setItems(items.filter((_, i) => i !== index));
+    announce('Item row removed');
   };
 
   const calculateTotal = () => {
@@ -85,6 +79,9 @@ function OrderModal({ onClose, onSave }) {
     const validItems = items.filter((item) => item.product_id && item.quantity && item.unit_cost);
     if (validItems.length === 0) newErrors.items = 'At least one item is required';
     setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
+      announce('Form has errors. Please correct them.', 'assertive');
+    }
     return Object.keys(newErrors).length === 0;
   };
 
@@ -102,24 +99,32 @@ function OrderModal({ onClose, onSave }) {
           unit_cost: item.unit_cost
         }))
       });
+      announce('Order created successfully');
       onSave();
     } catch (err) {
       console.error('Failed to create order', err);
       setErrors({ submit: 'Failed to create order. Please try again.' });
+      announce('Failed to create order', 'assertive');
     }
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true"
-         aria-label="Create new order">
-      <div className="modal-content modal-wide" onClick={(e) => e.stopPropagation()}
-           ref={modalRef} tabIndex={-1}>
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className="modal-content modal-wide"
+        onClick={(e) => e.stopPropagation()}
+        ref={trapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="order-modal-title"
+        tabIndex={-1}
+      >
         <div className="modal-header">
-          <h2>New Order</h2>
+          <h2 id="order-modal-title">New Order</h2>
           <button className="modal-close" onClick={onClose} aria-label="Close modal">&times;</button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           {errors.submit && <p className="error-message" role="alert">{errors.submit}</p>}
 
           <div className="form-row">
@@ -127,13 +132,14 @@ function OrderModal({ onClose, onSave }) {
               <label htmlFor="supplier_id">Supplier *</label>
               <select id="supplier_id" name="supplier_id" value={formData.supplier_id}
                       onChange={handleChange} aria-required="true"
-                      aria-invalid={errors.supplier_id ? 'true' : 'false'}>
+                      aria-invalid={errors.supplier_id ? 'true' : 'false'}
+                      aria-describedby={errors.supplier_id ? 'supplier-error' : undefined}>
                 <option value="">Select supplier</option>
                 {suppliers.map((sup) => (
                   <option key={sup.supplier_id} value={sup.supplier_id}>{sup.name}</option>
                 ))}
               </select>
-              {errors.supplier_id && <span className="field-error" role="alert">{errors.supplier_id}</span>}
+              {errors.supplier_id && <span id="supplier-error" className="field-error" role="alert">{errors.supplier_id}</span>}
             </div>
             <div className="form-group">
               <label htmlFor="expected_delivery">Expected Delivery</label>
@@ -142,17 +148,20 @@ function OrderModal({ onClose, onSave }) {
             </div>
           </div>
 
-          <div className="order-items-section">
+          <fieldset className="order-items-section">
+            <legend className="sr-only">Order line items</legend>
             <div className="order-items-header">
               <h3>Order Items</h3>
-              <button type="button" className="btn btn-small" onClick={addItem}>
+              <button type="button" className="btn btn-small" onClick={addItem}
+                      aria-label="Add another item row">
                 + Add Item
               </button>
             </div>
             {errors.items && <p className="field-error" role="alert">{errors.items}</p>}
 
             {items.map((item, index) => (
-              <div key={index} className="order-item-row">
+              <div key={index} className="order-item-row" role="group"
+                   aria-label={`Order item ${index + 1}`}>
                 <div className="form-group">
                   <label htmlFor={`product-${index}`}>Product</label>
                   <select id={`product-${index}`} value={item.product_id}
@@ -185,10 +194,10 @@ function OrderModal({ onClose, onSave }) {
               </div>
             ))}
 
-            <div className="order-total">
+            <div className="order-total" aria-live="polite">
               <strong>Total: £{calculateTotal()}</strong>
             </div>
-          </div>
+          </fieldset>
 
           <div className="form-group">
             <label htmlFor="notes">Notes</label>

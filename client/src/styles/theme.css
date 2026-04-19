@@ -1,14 +1,4 @@
-/* ==========================================================================
-   theme.css — Base styling, spacing scale, themes, accessibility
-   Attributes set on <html> by AccessibilityContext:
-     data-theme="light" | "dark" | "high-contrast"
-     data-font-size="small" | "medium" | "large" | "xlarge"
-     data-page-zoom="75" | "85" | "100" | "115"
-     data-reduced-motion="true" | "false"
-     data-underline-links="true" | "false"
-   ========================================================================== */
 
-/* ---------- CSS Variables ---------- */
 :root {
   /* Colors (light theme defaults) */
   --bg: #f5f7fa;
@@ -20,10 +10,10 @@
   --color-surface: #ffffff;
   --border-color: #e4e7eb;
   --color-border: #e4e7eb;
-  --primary: #4a90d9;
-  --primary-color: #4a90d9;
-  --color-primary: #4a90d9;
-  --primary-hover: #3a7bb8;
+  --primary: #2b6cb0;
+  --primary-color: #2b6cb0;
+  --color-primary: #2b6cb0;
+  --primary-hover: #1e5a96;
   --success: #3cb371;
   --warning: #f5a623;
   --color-warning: #f5a623;
@@ -56,7 +46,7 @@
   --radius-sm: 6px;
 }
 
-/* ---------- Base ---------- */
+/* Base */
 * { box-sizing: border-box; }
 
 body {
@@ -83,7 +73,7 @@ p { margin: 0 0 var(--spacing-md); }
 a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* ---------- Page container ---------- */
+/* Page container */
 .page,
 .dashboard,
 .products-page,
@@ -110,7 +100,7 @@ a:hover { text-decoration: underline; }
   margin-bottom: var(--spacing-xl);
 }
 
-/* ---------- Cards ---------- */
+/* Cards */
 .card,
 .chart-card,
 .stat-card,
@@ -122,7 +112,7 @@ a:hover { text-decoration: underline; }
   box-shadow: var(--shadow-sm);
 }
 
-/* ---------- Stat cards ---------- */
+/* Stat cards */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -156,7 +146,7 @@ a:hover { text-decoration: underline; }
 .stat-card.warning .stat-number { color: var(--warning); }
 .stat-card.danger .stat-number { color: var(--danger); }
 
-/* ---------- Tables ---------- */
+/* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -182,7 +172,7 @@ th {
 tbody tr { transition: background 0.1s; }
 tbody tr:hover { background: rgba(74, 144, 217, 0.04); }
 
-/* ---------- Buttons ---------- */
+/* Buttons */
 button, .btn {
   padding: var(--spacing-sm) var(--spacing-md);
   border: none;
@@ -211,7 +201,7 @@ a:focus-visible, input:focus-visible, select:focus-visible {
 .btn-secondary:hover { background: rgba(74, 144, 217, 0.1); }
 .btn-danger { background: var(--danger); }
 
-/* ---------- Filter pill buttons ---------- */
+/* Filter Buttons */
 .filter-bar,
 .chart-filters {
   display: flex;
@@ -237,7 +227,7 @@ a:focus-visible, input:focus-visible, select:focus-visible {
   color: #fff;
 }
 
-/* ---------- Forms ---------- */
+/* Forms */
 input, select, textarea {
   padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid var(--border-color);
@@ -255,7 +245,7 @@ input:focus, select:focus, textarea:focus {
 
 label { color: var(--text); font-weight: 500; }
 
-/* ---------- Status badges ---------- */
+/* Status Badges */
 .status-badge {
   display: inline-block;
   padding: 4px 10px;
@@ -269,14 +259,14 @@ label { color: var(--text); font-weight: 500; }
 .status-delivered { background: #d4edda; color: #155724; }
 .status-cancelled { background: #f8d7da; color: #721c24; }
 
-/* ---------- Low stock row ---------- */
+/* Low Stock Rows */
 .low-stock-row,
 .low-stock-row td {
   background: var(--low-stock-bg) !important;
   color: var(--low-stock-text) !important;
 }
 
-/* ---------- Charts grid ---------- */
+/* Charts Grid */
 .dashboard-charts,
 .charts-grid {
   display: grid;
@@ -285,26 +275,19 @@ label { color: var(--text); font-weight: 500; }
   margin-bottom: var(--spacing-xl);
 }
 
-/* ==========================================================================
-   FONT SIZE (body-text scaling)
-   ========================================================================== */
+/* FONT SIZE (body-text scaling) */
 [data-font-size="small"]  { font-size: 14px; }
 [data-font-size="medium"] { font-size: 16px; }
 [data-font-size="large"]  { font-size: 18px; }
 [data-font-size="xlarge"] { font-size: 20px; }
 
-/* ==========================================================================
-   PAGE ZOOM (proportional layout scaling)
-   Uses CSS zoom so everything shrinks, letting more fit on the screen.
-   ========================================================================== */
+/* PAGE ZOOM (proportional layout scaling) Uses CSS zoom so everything shrinks, letting more fit on the screen.*/
 [data-page-zoom="75"]  { zoom: 0.75; }
 [data-page-zoom="85"]  { zoom: 0.85; }
 [data-page-zoom="100"] { zoom: 1; }
 [data-page-zoom="115"] { zoom: 1.15; }
 
-/* ==========================================================================
-   DARK THEME
-   ========================================================================== */
+/* DARK THEME */
 [data-theme="dark"] {
   --bg: #15171c;
   --text: #f0f0f0;
@@ -343,9 +326,7 @@ label { color: var(--text); font-weight: 500; }
   color: #0a0e14;
 }
 
-/* ==========================================================================
-   HIGH CONTRAST
-   ========================================================================== */
+/* HIGH CONTRAST */
 [data-theme="high-contrast"] {
   --bg: #000;
   --text: #fff;
@@ -374,9 +355,7 @@ label { color: var(--text); font-weight: 500; }
   background: #000 !important; color: #ffff00 !important; outline: 2px solid #ffff00;
 }
 
-/* ==========================================================================
-   REDUCED MOTION
-   ========================================================================== */
+/* REDUCED MOTION */
 [data-reduced-motion="true"],
 [data-reduced-motion="true"] *,
 [data-reduced-motion="true"] *::before,
@@ -394,12 +373,10 @@ label { color: var(--text); font-weight: 500; }
   transition: none !important;
 }
 
-/* ==========================================================================
-   UNDERLINE LINKS
-   ========================================================================== */
+/* UNDERLINE LINKS */
 [data-underline-links="true"] a { text-decoration: underline !important; }
 
-/* ---------- Skip link ---------- */
+/* Skip Link */
 .skip-link {
   position: absolute;
   top: -40px;

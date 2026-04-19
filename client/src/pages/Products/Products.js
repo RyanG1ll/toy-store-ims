@@ -10,10 +10,15 @@ import {
 } from 'recharts';
 import '../../styles/filters.css'; 
 import { useAccessibility } from '../../context/AccessibilityContext';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
+
 
 // The Products component displays a list of products with search, add, edit, and delete functionality.
 // It fetches products from the API and allows users to manage their inventory effectively.
 function Products() {
+
+  useDocumentTitle('Products');
+  
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

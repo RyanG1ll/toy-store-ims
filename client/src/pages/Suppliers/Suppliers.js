@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import SupplierModal from './SupplierModal';
 import './Suppliers.css';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 function Suppliers() {
+  useDocumentTitle('Suppliers');
   const [suppliers, setSuppliers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

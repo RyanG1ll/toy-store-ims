@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import './ProductModal.css';
 import Tooltip from '../../components/tooltip/ToolTip';
 import educationalContent from '../../data/educationalContent';
+import useFocusTrap from '../../hooks/useFocusTrap';
+import { useAnnounce } from '../../components/LiveAnnouncer';
 
 function ProductModal({ product, onClose, onSave }) {
   const [formData, setFormData] = useState({
@@ -21,7 +23,10 @@ function ProductModal({ product, onClose, onSave }) {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [errors, setErrors] = useState({});
-  const modalRef = useRef(null);
+
+  // Focus trap: traps Tab inside the modal and returns focus on close
+  const trapRef = useFocusTrap(onClose);
+  const announce = useAnnounce();
 
   // If editing, pre-fill the form with existing product data
   useEffect(() => {
@@ -59,26 +64,9 @@ function ProductModal({ product, onClose, onSave }) {
     fetchOptions();
   }, []);
 
-  // Close modal on Escape key (accessibility)
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
-
-  // Focus trap - focus the modal when it opens
-  useEffect(() => {
-    if (modalRef.current) {
-      modalRef.current.focus();
-    }
-  }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: null }));
     }
@@ -93,58 +81,71 @@ function ProductModal({ product, onClose, onSave }) {
     if (!formData.cost_price || parseFloat(formData.cost_price) < 0)
       newErrors.cost_price = 'Valid cost price is required';
     setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
+      announce('Form has errors. Please correct them.', 'assertive');
+    }
     return Object.keys(newErrors).length === 0;
   };
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    
+
     try {
-        if (product) {
-            // Update existing product
-            await api.put(`/products/${product.product_id}`, formData);
-        }
-        else {
-            // Create new product
-            await api.post('/products', formData);
-        }
-        onSave(); // Notify parent to refresh product list
-    }       catch (err) {              
-        console.error('Failed to save product', err);
-        setErrors({ submit: 'Failed to save product. Please try again.' });
+      if (product) {
+        await api.put(`/products/${product.product_id}`, formData);
+        announce('Product updated successfully');
+      } else {
+        await api.post('/products', formData);
+        announce('Product added successfully');
+      }
+      onSave();
+    } catch (err) {
+      console.error('Failed to save product', err);
+      setErrors({ submit: 'Failed to save product. Please try again.' });
+      announce('Failed to save product', 'assertive');
     }
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true"
-         aria-label={product ? 'Edit product' : 'Add new product'}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}
-           ref={modalRef} tabIndex={-1}>
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className="modal-content"
+        onClick={(e) => e.stopPropagation()}
+        ref={trapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="product-modal-title"
+        tabIndex={-1}
+      >
         <div className="modal-header">
-          <h2>{product ? 'Edit Product' : 'Add New Product'}</h2>
+          <h2 id="product-modal-title">
+            {product ? 'Edit Product' : 'Add New Product'}
+          </h2>
           <button className="modal-close" onClick={onClose} aria-label="Close modal">
             &times;
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           {errors.submit && <p className="error-message" role="alert">{errors.submit}</p>}
 
           <div className="form-group">
             <label htmlFor="name">Product Name *</label>
             <input id="name" name="name" type="text" value={formData.name}
                    onChange={handleChange} aria-required="true"
-                   aria-invalid={errors.name ? 'true' : 'false'} />
-            {errors.name && <span className="field-error" role="alert">{errors.name}</span>}
+                   aria-invalid={errors.name ? 'true' : 'false'}
+                   aria-describedby={errors.name ? 'name-error' : undefined} />
+            {errors.name && <span id="name-error" className="field-error" role="alert">{errors.name}</span>}
           </div>
 
           <div className="form-group">
             <label htmlFor="sku">SKU *</label>
             <input id="sku" name="sku" type="text" value={formData.sku}
                    onChange={handleChange} aria-required="true"
-                   aria-invalid={errors.sku ? 'true' : 'false'} />
-            {errors.sku && <span className="field-error" role="alert">{errors.sku}</span>}
+                   aria-invalid={errors.sku ? 'true' : 'false'}
+                   aria-describedby={errors.sku ? 'sku-error' : undefined} />
+            {errors.sku && <span id="sku-error" className="field-error" role="alert">{errors.sku}</span>}
           </div>
 
           <div className="form-row">
@@ -152,15 +153,17 @@ function ProductModal({ product, onClose, onSave }) {
               <label htmlFor="unit_price">Selling Price (£) *</label>
               <input id="unit_price" name="unit_price" type="number" step="0.01" min="0"
                      value={formData.unit_price} onChange={handleChange} aria-required="true"
-                     aria-invalid={errors.unit_price ? 'true' : 'false'} />
-              {errors.unit_price && <span className="field-error" role="alert">{errors.unit_price}</span>}
+                     aria-invalid={errors.unit_price ? 'true' : 'false'}
+                     aria-describedby={errors.unit_price ? 'price-error' : undefined} />
+              {errors.unit_price && <span id="price-error" className="field-error" role="alert">{errors.unit_price}</span>}
             </div>
             <div className="form-group">
               <label htmlFor="cost_price">Cost Price (£) *</label>
               <input id="cost_price" name="cost_price" type="number" step="0.01" min="0"
                      value={formData.cost_price} onChange={handleChange} aria-required="true"
-                     aria-invalid={errors.cost_price ? 'true' : 'false'} />
-              {errors.cost_price && <span className="field-error" role="alert">{errors.cost_price}</span>}
+                     aria-invalid={errors.cost_price ? 'true' : 'false'}
+                     aria-describedby={errors.cost_price ? 'cost-error' : undefined} />
+              {errors.cost_price && <span id="cost-error" className="field-error" role="alert">{errors.cost_price}</span>}
             </div>
           </div>
 
@@ -190,19 +193,22 @@ function ProductModal({ product, onClose, onSave }) {
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="quantity_in_stock">
-                Stock Level <Tooltip content={educationalContent.stockMovement} /></label>
+                Stock Level <Tooltip content={educationalContent.stockMovement} />
+              </label>
               <input id="quantity_in_stock" name="quantity_in_stock" type="number" min="0"
                      value={formData.quantity_in_stock} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label htmlFor="reorder_level">
-                Reorder Level <Tooltip content={educationalContent.reorderPoint} /></label>
+                Reorder Level <Tooltip content={educationalContent.reorderPoint} />
+              </label>
               <input id="reorder_level" name="reorder_level" type="number" min="0"
                      value={formData.reorder_level} onChange={handleChange} />
             </div>
             <div className="form-group">
               <label htmlFor="reorder_quantity">
-                Reorder Quantity <Tooltip content={educationalContent.reorderQuantity} /></label>
+                Reorder Quantity <Tooltip content={educationalContent.reorderQuantity} />
+              </label>
               <input id="reorder_quantity" name="reorder_quantity" type="number" min="0"
                      value={formData.reorder_quantity} onChange={handleChange} />
             </div>

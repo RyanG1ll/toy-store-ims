@@ -4,6 +4,8 @@ import './Dashboard.css';
 import Tooltip from '../../components/tooltip/ToolTip';
 import educationalContent from '../../data/educationalContent';
 import { useAccessibility } from '../../context/AccessibilityContext';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
+import { useAnnounce } from '../../components/LiveAnnouncer';
 import {
   PieChart, Pie, Cell, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip as ChartTooltip, Legend, ResponsiveContainer
@@ -15,7 +17,10 @@ import {
 // It also serves as a hub for navigating to other parts of the application, such as products and suppliers
 // The dashboard is designed to be simple and informative, giving users the information they need at a glance
 // Future enhancements could include charts and graphs for visualizing trends, as well as more detailed analytics
+
 function Dashboard() {
+  useDocumentTitle('Dashboard');
+
   const [stats, setStats] = useState({
     totalProducts: 0,
     totalSuppliers: 0,
@@ -26,6 +31,7 @@ function Dashboard() {
   const [error, setError] = useState(null);
   const [chartFilter, setChartFilter] = useState('all');
   const { reducedMotion } = useAccessibility();
+  const announce = useAnnounce();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,34 +48,48 @@ function Dashboard() {
     fetchData();
   }, []);
 
-  if (loading) return <p>Loading dashboard...</p>;
-  if (error) return <p role="alert">{error}</p>;
+  const handleFilterChange = (filter) => {
+    setChartFilter(filter);
+    const labels = { all: 'All charts', stock: 'Stock charts only', orders: 'Order charts only' };
+    announce(`Showing ${labels[filter]}`);
+  };
+
+  if (loading) return <div className="dashboard"><h1>Dashboard</h1><p aria-live="polite">Loading dashboard...</p></div>;
+  if (error) return <div className="dashboard"><h1>Dashboard</h1><p role="alert">{error}</p></div>;
 
   return (
     <div className="dashboard">
       <h1>Dashboard</h1>
 
+      {/* Stats cards */}
       <div className="stats-grid" role="region" aria-label="Key statistics">
         <div className="stat-card">
           <h2>Total Products</h2>
-          <p className="stat-number">{stats.totalProducts}</p>
+          <p className="stat-number" aria-label={`${stats.totalProducts} total products`}>
+            {stats.totalProducts}
+          </p>
         </div>
         <div className="stat-card">
           <h2>Total Suppliers</h2>
-          <p className="stat-number">{stats.totalSuppliers}</p>
+          <p className="stat-number" aria-label={`${stats.totalSuppliers} total suppliers`}>
+            {stats.totalSuppliers}
+          </p>
         </div>
         <div className="stat-card warning">
           <h2>Low Stock Items</h2>
-          <p className="stat-number">{stats.lowStockItems.length}</p>
+          <p className="stat-number" aria-label={`${stats.lowStockItems.length} low stock items`}>
+            {stats.lowStockItems.length}
+          </p>
         </div>
       </div>
 
-      <div className="chart-filters" role="group" aria-label="Filter charts">
+      {/* Chart filter buttons */}
+      <div className="chart-filters" role="toolbar" aria-label="Chart filter options">
         {['all', 'stock', 'orders'].map((f) => (
           <button
             key={f}
             className={`filter-btn ${chartFilter === f ? 'active' : ''}`}
-            onClick={() => setChartFilter(f)}
+            onClick={() => handleFilterChange(f)}
             aria-pressed={chartFilter === f}
           >
             {f === 'all' ? 'All Charts' : f === 'stock' ? 'Stock Charts' : 'Order Charts'}
@@ -77,9 +97,11 @@ function Dashboard() {
         ))}
       </div>
 
+      {/* Charts */}
       <div className="dashboard-charts">
         {(chartFilter === 'all' || chartFilter === 'stock') && (
-          <div className="chart-card">
+          <div className="chart-card" role="figure"
+               aria-label={`Pie chart showing stock distribution across ${stats.stockByCategory?.length || 0} categories`}>
             <h2>
               Stock by Category
               <Tooltip content={educationalContent.abcAnalysis} />
@@ -106,11 +128,16 @@ function Dashboard() {
                 </PieChart>
               </ResponsiveContainer>
             ) : <p>No stock data yet.</p>}
+            {/* Screen reader text summary of chart data */}
+            <div className="sr-only">
+              Stock by category: {stats.stockByCategory?.map(c => `${c.category}: ${c.total_stock} units`).join(', ')}
+            </div>
           </div>
         )}
 
         {(chartFilter === 'all' || chartFilter === 'orders') && (
-          <div className="chart-card">
+          <div className="chart-card" role="figure"
+               aria-label="Bar chart showing orders placed per month over the last 6 months">
             <h2>
               Orders Over Time
               <Tooltip content={educationalContent.demandForecasting} />
@@ -127,10 +154,14 @@ function Dashboard() {
                 </BarChart>
               </ResponsiveContainer>
             ) : <p>No order history yet.</p>}
+            <div className="sr-only">
+              Orders over time: {stats.ordersOverTime?.map(o => `${o.month}: ${o.order_count} orders`).join(', ')}
+            </div>
           </div>
         )}
 
-        <div className="chart-card">
+        <div className="chart-card" role="figure"
+             aria-label="Donut chart showing stock health breakdown: healthy, low stock, and out of stock products">
           <h2>
             Stock Status
             <Tooltip content={educationalContent.reorderPoint} />
@@ -162,6 +193,11 @@ function Dashboard() {
               </PieChart>
             </ResponsiveContainer>
           ) : <p>No stock data.</p>}
+          <div className="sr-only">
+            Stock status: {stats.stockStatusBreakdown?.healthy || 0} healthy,
+            {' '}{stats.stockStatusBreakdown?.low_stock || 0} low stock,
+            {' '}{stats.stockStatusBreakdown?.out_of_stock || 0} out of stock.
+          </div>
         </div>
       </div>
 
@@ -170,6 +206,9 @@ function Dashboard() {
         <section aria-label="Low stock alerts">
           <h2>Low Stock Alerts <Tooltip content={educationalContent.reorderPoint} /></h2>
           <table>
+            <caption className="sr-only">
+              Products that are at or below their reorder level
+            </caption>
             <thead>
               <tr>
                 <th scope="col">Product</th>
@@ -199,6 +238,9 @@ function Dashboard() {
           <p>No orders yet.</p>
         ) : (
           <table>
+            <caption className="sr-only">
+              The 5 most recent supplier orders
+            </caption>
             <thead>
               <tr>
                 <th scope="col">Order #</th>

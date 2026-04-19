@@ -13,6 +13,8 @@ import NotificationPopup from './components/notificationpopup/NotificationPopup'
 import './styles/theme.css';
 import { AccessibilityProvider } from './context/AccessibilityContext';
 import Settings from './pages/Settings/Settings';
+import { LiveAnnouncerProvider } from './components/LiveAnnouncer';
+import SkipLink from './components/SkipLink';
 
 // Protected route wrapper — redirects to login if not authenticated
 function ProtectedRoute({ children }) {
@@ -26,9 +28,7 @@ function AppContent() {
 
   return (
     <>
-      <a href="#main-content" className="skip-link">
-        Skip to main content
-      </a>
+      <SkipLink />
 
       {user && <Navbar />}
       {user && <NotificationPopup />}
@@ -52,11 +52,13 @@ function AppContent() {
 function App() {
   return (
     <AccessibilityProvider>
-       <AuthProvider>
+      <LiveAnnouncerProvider>
+        <AuthProvider>
           <Router>
             <AppContent />
           </Router>
-       </AuthProvider>
+        </AuthProvider>
+      </LiveAnnouncerProvider>
     </AccessibilityProvider>
   );
 }

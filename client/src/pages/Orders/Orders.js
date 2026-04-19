@@ -8,8 +8,10 @@ import {
   PieChart, Pie, Cell, Tooltip as ChartTooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import { useAccessibility } from '../../context/AccessibilityContext';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 function Orders() {
+  useDocumentTitle('Orders');
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

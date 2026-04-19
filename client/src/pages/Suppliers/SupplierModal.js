@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import '../Products/ProductModal.css';
+import useFocusTrap from '../../hooks/useFocusTrap';
+import { useAnnounce } from '../../components/LiveAnnouncer';
 
 function SupplierModal({ supplier, onClose, onSave }) {
   const [formData, setFormData] = useState({
@@ -12,7 +14,10 @@ function SupplierModal({ supplier, onClose, onSave }) {
     lead_time_days: '7',
   });
   const [errors, setErrors] = useState({});
-  const modalRef = useRef(null);
+
+  // Focus trap: traps Tab inside the modal and returns focus on close
+  const trapRef = useFocusTrap(onClose);
+  const announce = useAnnounce();
 
   useEffect(() => {
     if (supplier) {
@@ -27,18 +32,6 @@ function SupplierModal({ supplier, onClose, onSave }) {
     }
   }, [supplier]);
 
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
-
-  useEffect(() => {
-    if (modalRef.current) modalRef.current.focus();
-  }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -49,6 +42,9 @@ function SupplierModal({ supplier, onClose, onSave }) {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = 'Supplier name is required';
     setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
+      announce('Form has errors. Please correct them.', 'assertive');
+    }
     return Object.keys(newErrors).length === 0;
   };
 
@@ -56,40 +52,49 @@ function SupplierModal({ supplier, onClose, onSave }) {
     e.preventDefault();
     if (!validate()) return;
     try {
-        if (supplier) {
-            // Update existing supplier
-            await api.put(`/suppliers/${supplier.supplier_id}`, formData);
-        }
-        else {
-            // Create new supplier
-            await api.post('/suppliers', formData);
-        }
-        onSave(); // Notify parent to refresh supplier list
-    }       catch (err) {              
-        console.error('Failed to save supplier', err);
-        setErrors({ submit: 'Failed to save supplier. Please try again.' });
+      if (supplier) {
+        await api.put(`/suppliers/${supplier.supplier_id}`, formData);
+        announce('Supplier updated successfully');
+      } else {
+        await api.post('/suppliers', formData);
+        announce('Supplier added successfully');
+      }
+      onSave();
+    } catch (err) {
+      console.error('Failed to save supplier', err);
+      setErrors({ submit: 'Failed to save supplier. Please try again.' });
+      announce('Failed to save supplier', 'assertive');
     }
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true"
-         aria-label={supplier ? 'Edit supplier' : 'Add new supplier'}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}
-           ref={modalRef} tabIndex={-1}>
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className="modal-content"
+        onClick={(e) => e.stopPropagation()}
+        ref={trapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="supplier-modal-title"
+        tabIndex={-1}
+      >
         <div className="modal-header">
-          <h2>{supplier ? 'Edit Supplier' : 'Add New Supplier'}</h2>
+          <h2 id="supplier-modal-title">
+            {supplier ? 'Edit Supplier' : 'Add New Supplier'}
+          </h2>
           <button className="modal-close" onClick={onClose} aria-label="Close modal">&times;</button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           {errors.submit && <p className="error-message" role="alert">{errors.submit}</p>}
 
           <div className="form-group">
             <label htmlFor="name">Supplier Name *</label>
             <input id="name" name="name" type="text" value={formData.name}
                    onChange={handleChange} aria-required="true"
-                   aria-invalid={errors.name ? 'true' : 'false'} />
-            {errors.name && <span className="field-error" role="alert">{errors.name}</span>}
+                   aria-invalid={errors.name ? 'true' : 'false'}
+                   aria-describedby={errors.name ? 'name-error' : undefined} />
+            {errors.name && <span id="name-error" className="field-error" role="alert">{errors.name}</span>}
           </div>
 
           <div className="form-row">

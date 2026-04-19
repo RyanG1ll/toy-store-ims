@@ -1,8 +1,3 @@
-/* Settings page — accessibility preferences
-   Matches actual Settings.js markup: .settings-option / .settings-options /
-   .settings-option-card / .settings-option-toggle / .reset-button
-*/
-
 .settings-page {
   max-width: 900px;
   margin: 0 auto;
@@ -64,6 +59,14 @@
 }
 
 .settings-option:hover {
+  border-color: var(--primary, #4a90d9);
+  background: rgba(74, 144, 217, 0.05);
+}
+
+.settings-option:focus-within,
+.settings-option:focus-visible {
+  outline: 3px solid var(--primary, #4a90d9);
+  outline-offset: 2px;
   border-color: var(--primary, #4a90d9);
   background: rgba(74, 144, 217, 0.05);
 }
@@ -143,4 +146,8 @@
 [data-theme="high-contrast"] .settings-option:has(input:checked) {
   background: #222;
   outline: 2px solid #ffff00;
+}
+[data-theme="high-contrast"] .settings-option:focus-visible {
+  outline: 3px solid #ffff00;
+  outline-offset: 2px;
 }
