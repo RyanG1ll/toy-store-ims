@@ -141,7 +141,7 @@ function ProductModal({ product, onClose, onSave }) {
 
           <div className="form-group">
             <label htmlFor="sku">SKU *</label>
-            <input id="sku" name="sku" type="text" value={formData.sku}
+            <input id="sku" name="sku" type="text" value={formData.sku} placeholder="e.g. PRO-001"
                    onChange={handleChange} aria-required="true"
                    aria-invalid={errors.sku ? 'true' : 'false'}
                    aria-describedby={errors.sku ? 'sku-error' : undefined} />
@@ -150,20 +150,20 @@ function ProductModal({ product, onClose, onSave }) {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="unit_price">Selling Price (£) *</label>
-              <input id="unit_price" name="unit_price" type="number" step="0.01" min="0"
-                     value={formData.unit_price} onChange={handleChange} aria-required="true"
-                     aria-invalid={errors.unit_price ? 'true' : 'false'}
-                     aria-describedby={errors.unit_price ? 'price-error' : undefined} />
-              {errors.unit_price && <span id="price-error" className="field-error" role="alert">{errors.unit_price}</span>}
-            </div>
-            <div className="form-group">
               <label htmlFor="cost_price">Cost Price (£) *</label>
               <input id="cost_price" name="cost_price" type="number" step="0.01" min="0"
                      value={formData.cost_price} onChange={handleChange} aria-required="true"
                      aria-invalid={errors.cost_price ? 'true' : 'false'}
                      aria-describedby={errors.cost_price ? 'cost-error' : undefined} />
               {errors.cost_price && <span id="cost-error" className="field-error" role="alert">{errors.cost_price}</span>}
+            </div>   
+            <div className="form-group">
+              <label htmlFor="unit_price">Selling Price (£) *</label>
+              <input id="unit_price" name="unit_price" type="number" step="0.01" min="0"
+                     value={formData.unit_price} onChange={handleChange} aria-required="true"
+                     aria-invalid={errors.unit_price ? 'true' : 'false'}
+                     aria-describedby={errors.unit_price ? 'price-error' : undefined} />
+              {errors.unit_price && <span id="price-error" className="field-error" role="alert">{errors.unit_price}</span>}
             </div>
           </div>
 
