@@ -7,7 +7,9 @@ const app = express();
 
 // Middleware
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: ' https://glare-cruncher-acutely.ngrok-free.dev'
+}));
 app.use(express.json());
 
 // Routes - these will be defined in separate files for better organization
