@@ -1,0 +1,396 @@
+/* ==========================================================================
+   Tutorial & Welcome Prompt
+   ========================================================================== */
+
+/* ---------- Shared overlay (used only by WelcomePrompt) ---------- */
+.tutorial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+/* ---------- Centered modal (WelcomePrompt) ---------- */
+.tutorial-modal {
+  background: var(--card-bg, #ffffff);
+  color: var(--text, #222);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  animation: tutorialFadeIn 0.25s ease-out;
+}
+
+.tutorial-modal:focus {
+  outline: none;
+}
+
+@keyframes tutorialFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tutorialSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   Bottom Panel (used by Tutorial walkthrough)
+   ========================================================================== */
+.tutorial-panel-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.tutorial-panel {
+  background: var(--card-bg, #ffffff);
+  color: var(--text, #222);
+  width: 100%;
+  max-width: 800px;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  animation: tutorialSlideUp 0.3s ease-out;
+  pointer-events: auto;
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
+.tutorial-panel:focus {
+  outline: none;
+}
+
+/* Progress bar */
+.tutorial-progress {
+  height: 4px;
+  background: var(--border-color, #e4e7eb);
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
+.tutorial-progress-fill {
+  height: 100%;
+  background: var(--primary, #2b6cb0);
+  transition: width 0.3s ease;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Step counter */
+.tutorial-step-count {
+  text-align: center;
+  padding: 0.6rem 1.5rem 0;
+  font-size: 0.8rem;
+  color: var(--muted, #666);
+  font-weight: 500;
+}
+
+/* Content area */
+.tutorial-content {
+  padding: 0.75rem 2rem 0.5rem;
+  text-align: center;
+}
+
+.tutorial-icon {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.tutorial-content h2 {
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem;
+  color: var(--text, #222);
+}
+
+.tutorial-description {
+  font-size: 0.95rem;
+  color: var(--text, #444);
+  line-height: 1.5;
+  margin: 0 0 0.75rem;
+}
+
+.tutorial-details {
+  text-align: left;
+  margin: 0 0 0.25rem;
+  padding: 0;
+  list-style: none;
+  columns: 2;
+  column-gap: 2rem;
+}
+
+.tutorial-details li {
+  position: relative;
+  padding: 0.3rem 0 0.3rem 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text, #333);
+  line-height: 1.45;
+  break-inside: avoid;
+}
+
+.tutorial-details li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--primary, #2b6cb0);
+  font-weight: 700;
+}
+
+/* Navigation buttons */
+.tutorial-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  gap: 0.5rem;
+  border-top: 1px solid var(--border-color, #e4e7eb);
+}
+
+.tutorial-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.tutorial-btn:active {
+  transform: translateY(1px);
+}
+
+.tutorial-btn:focus-visible {
+  outline: 3px solid var(--primary, #2b6cb0);
+  outline-offset: 2px;
+}
+
+.tutorial-btn-next {
+  background: var(--primary, #2b6cb0);
+  color: #fff;
+  margin-left: auto;
+}
+
+.tutorial-btn-next:hover {
+  background: var(--primary-hover, #1e5a96);
+}
+
+.tutorial-btn-back {
+  background: transparent;
+  color: var(--text, #333);
+  border: 1px solid var(--border-color, #ddd);
+}
+
+.tutorial-btn-back:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.tutorial-btn-skip {
+  background: transparent;
+  color: var(--muted, #888);
+  font-size: 0.85rem;
+}
+
+.tutorial-btn-skip:hover {
+  color: var(--text, #333);
+}
+
+/* Step dots */
+.tutorial-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 2rem 0.75rem;
+}
+
+.tutorial-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-color, #ddd);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.tutorial-dot.active {
+  background: var(--primary, #2b6cb0);
+  transform: scale(1.3);
+}
+
+.tutorial-dot.completed {
+  background: var(--primary, #2b6cb0);
+  opacity: 0.4;
+}
+
+/* ==========================================================================
+   Welcome Prompt specific (stays centered with overlay)
+   ========================================================================== */
+
+.welcome-prompt .tutorial-content {
+  padding: 2rem 2rem 1rem;
+}
+
+.welcome-subtext {
+  color: var(--muted, #666);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.welcome-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid var(--border-color, #e4e7eb);
+}
+
+.welcome-btn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* ==========================================================================
+   DARK THEME
+   ========================================================================== */
+[data-theme="dark"] .tutorial-modal,
+[data-theme="dark"] .tutorial-panel {
+  background: var(--card-bg, #232731);
+  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .tutorial-btn-back {
+  color: #f0f0f0;
+  border-color: #444b57;
+}
+
+[data-theme="dark"] .tutorial-btn-back:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .tutorial-btn-skip {
+  color: #8a929e;
+}
+
+[data-theme="dark"] .tutorial-btn-skip:hover {
+  color: #f0f0f0;
+}
+
+[data-theme="dark"] .tutorial-details li::before {
+  color: var(--primary, #5aa0e6);
+}
+
+/* ==========================================================================
+   HIGH CONTRAST
+   ========================================================================== */
+[data-theme="high-contrast"] .tutorial-overlay {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme="high-contrast"] .tutorial-modal,
+[data-theme="high-contrast"] .tutorial-panel {
+  background: #000;
+  border: 2px solid #fff;
+  box-shadow: none;
+}
+
+[data-theme="high-contrast"] .tutorial-content h2,
+[data-theme="high-contrast"] .tutorial-description,
+[data-theme="high-contrast"] .tutorial-details li {
+  color: #fff;
+}
+
+[data-theme="high-contrast"] .tutorial-progress {
+  background: #333;
+}
+
+[data-theme="high-contrast"] .tutorial-progress-fill {
+  background: #ffff00;
+}
+
+[data-theme="high-contrast"] .tutorial-dot.active {
+  background: #ffff00;
+}
+
+[data-theme="high-contrast"] .tutorial-btn-next {
+  background: #ffff00;
+  color: #000;
+}
+
+[data-theme="high-contrast"] .tutorial-btn-back {
+  color: #fff;
+  border-color: #fff;
+}
+
+[data-theme="high-contrast"] .tutorial-btn-skip {
+  color: #ccc;
+}
+
+[data-theme="high-contrast"] .tutorial-details li::before {
+  color: #ffff00;
+}
+
+[data-theme="high-contrast"] .tutorial-step-count {
+  color: #ccc;
+}
+
+[data-theme="high-contrast"] .welcome-subtext {
+  color: #ccc;
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+[data-reduced-motion="true"] .tutorial-modal,
+[data-reduced-motion="true"] .tutorial-panel {
+  animation: none;
+}
+
+[data-reduced-motion="true"] .tutorial-progress-fill {
+  transition: none;
+}
+
+[data-reduced-motion="true"] .tutorial-dot {
+  transition: none;
+}
+
+/* ==========================================================================
+   Responsive — single column details on smaller screens
+   ========================================================================== */
+@media (max-width: 600px) {
+  .tutorial-details {
+    columns: 1;
+  }
+
+  .tutorial-panel {
+    max-height: 55vh;
+  }
+}

@@ -1,5 +1,5 @@
 .forecasting-page {
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -16,10 +16,47 @@
   font-size: 0.95rem;
 }
 
+/* Search and controls bar */
+.forecasting-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.forecasting-search {
+  flex: 1;
+  min-width: 200px;
+}
+
+.forecast-search-input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: var(--card-bg, #fff);
+  color: var(--text, #222);
+}
+
+.forecast-search-input:focus {
+  outline: 3px solid var(--primary, #4a90d9);
+  outline-offset: 1px;
+  border-color: var(--primary, #4a90d9);
+}
+
+.forecasting-toggle-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Cards list — single column for accordion */
 .forecast-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .forecast-card {
@@ -29,29 +66,77 @@
   overflow: hidden;
 }
 
+/* Clickable header */
 .forecast-card-header {
-  padding: 1rem;
-  border-bottom: 1px solid var(--border-color, #eee);
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0.85rem 1.25rem;
+  background: var(--card-bg, #fff);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text, #222);
+  transition: background 0.15s;
 }
 
-.forecast-card-header h3 {
+.forecast-card-header:hover {
+  background: rgba(74, 144, 217, 0.04);
+}
+
+.forecast-card-header:focus-visible {
+  outline: 3px solid var(--primary, #4a90d9);
+  outline-offset: -3px;
+}
+
+.forecast-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.forecast-card-header h2 {
   margin: 0;
   font-size: 1rem;
 }
 
 .forecast-card-header .sku {
   font-size: 0.8rem;
+  color: var(--text-secondary, #717171);
+}
+
+.forecast-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.forecast-stock-summary {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary, #666);
+}
+
+.forecast-chevron {
+  font-size: 1.1rem;
+  transition: transform 0.2s;
   color: var(--text-secondary, #999);
 }
 
+.forecast-chevron.expanded {
+  transform: rotate(180deg);
+}
+
+/* Status badges */
 .stock-status {
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .stock-status.healthy {
@@ -74,8 +159,10 @@
   color: white;
 }
 
+/* Expandable body */
 .forecast-card-body {
-  padding: 1rem;
+  padding: 0 1.25rem 1.25rem;
+  border-top: 1px solid var(--border-color, #eee);
 }
 
 .forecast-metric {
@@ -103,7 +190,7 @@
 }
 
 .metric-value.highlight {
-  color: var(--primary-color, #4a90d9);
+  color: var(--primary, #4a90d9);
 }
 
 .metric-value.warning {
@@ -133,7 +220,7 @@
 .demand-chart {
   margin: 0.5rem 0 1rem 0;
   padding: 0.5rem;
-  background: #fafafa;
+  background: var(--bg, #fafafa);
   border-radius: 6px;
 }
 
@@ -143,4 +230,117 @@
   color: var(--text-secondary, #666);
   margin-bottom: 0.25rem;
   text-align: center;
+}
+
+/* Dark theme */
+[data-theme="dark"] .forecast-card-header {
+  background: var(--card-bg, #232731);
+}
+
+[data-theme="dark"] .forecast-card-header:hover {
+  background: rgba(90, 160, 230, 0.08);
+}
+
+[data-theme="dark"] .forecast-search-input {
+  background: var(--card-bg, #232731);
+  border-color: #444b57;
+  color: #f0f0f0;
+}
+
+[data-theme="dark"] .demand-chart {
+  background: #2a2f3a;
+}
+
+/* High contrast */
+[data-theme="high-contrast"] .forecast-card {
+  border: 2px solid #fff;
+}
+
+[data-theme="high-contrast"] .forecast-card-header {
+  background: #000;
+  color: #fff;
+}
+
+[data-theme="high-contrast"] .forecast-card-header:hover {
+  background: #111;
+}
+
+[data-theme="high-contrast"] .forecast-card-header:focus-visible {
+  outline: 3px solid #ffff00;
+}
+
+[data-theme="high-contrast"] .forecast-search-input {
+  background: #000;
+  border-color: #fff;
+  color: #fff;
+}
+
+[data-theme="high-contrast"] .forecast-search-input:focus {
+  outline-color: #ffff00;
+  border-color: #ffff00;
+}
+
+[data-theme="high-contrast"] .stock-status.healthy {
+  background: #000;
+  color: #0f0;
+  border: 1px solid #0f0;
+}
+
+[data-theme="high-contrast"] .stock-status.warning {
+  background: #000;
+  color: #ff0;
+  border: 1px solid #ff0;
+}
+
+[data-theme="high-contrast"] .stock-status.low {
+  background: #000;
+  color: #f00;
+  border: 1px solid #f00;
+}
+
+[data-theme="high-contrast"] .stock-status.out_of_stock {
+  background: #f00;
+  color: #fff;
+}
+
+/* Reduced motion */
+[data-reduced-motion="true"] .forecast-chevron {
+  transition: none;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  .forecasting-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .forecasting-search {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .forecasting-toggle-buttons {
+    width: 100%;
+  }
+
+  .forecasting-toggle-buttons button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .forecast-card-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .forecast-header-right {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+  }
+
+  .forecast-card-body {
+    padding: 0 1rem 1rem;
+  }
 }

@@ -3,18 +3,31 @@ const router = express.Router();
 const pool = require('../config/db');
 const auth = require('../middleware/auth');
 
-// GET all notifications (newest first, with optional filter)
+// GET all notifications (newest first, with optional filters)
 router.get('/', auth, async (req, res) => {
   try {
-    const { unread_only } = req.query;
+    const { unread_only, include_cleared, cleared_only } = req.query;
     let query = 'SELECT * FROM notifications';
+    const conditions = [];
     const params = [];
 
-    if (unread_only === 'true') {
-      query += ' WHERE is_read = FALSE';
+    if (cleared_only === 'true') {
+      // Show only cleared messages
+      conditions.push('is_cleared = TRUE');
+    } else if (include_cleared !== 'true') {
+      // By default hide cleared messages
+      conditions.push('is_cleared = FALSE');
     }
 
-    query += ' ORDER BY created_at DESC LIMIT 50';
+    if (unread_only === 'true') {
+      conditions.push('is_read = FALSE');
+    }
+
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
+    }
+
+    query += ' ORDER BY created_at DESC LIMIT 100';
 
     const result = await pool.query(query, params);
     res.json(result.rows);
@@ -28,7 +41,7 @@ router.get('/', auth, async (req, res) => {
 router.get('/unread-count', auth, async (req, res) => {
   try {
     const result = await pool.query(
-      'SELECT COUNT(*) FROM notifications WHERE is_read = FALSE'
+      'SELECT COUNT(*) FROM notifications WHERE is_read = FALSE AND is_cleared = FALSE'
     );
     res.json({ count: parseInt(result.rows[0].count) });
   } catch (err) {
@@ -82,13 +95,28 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// DELETE clear all read notifications
-router.delete('/clear/read', auth, async (req, res) => {
+// PUT clear read notifications (soft-delete — only info severity; critical/warning stay visible)
+router.put('/clear/read', auth, async (req, res) => {
   try {
-    await pool.query('DELETE FROM notifications WHERE is_read = TRUE');
-    res.json({ message: 'Read notifications cleared' });
+    const result = await pool.query(
+      "UPDATE notifications SET is_cleared = TRUE WHERE is_read = TRUE AND is_cleared = FALSE AND severity = 'info'"
+    );
+    res.json({ message: 'Read info notifications cleared', cleared: result.rowCount });
   } catch (err) {
     console.error('Error clearing notifications:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// PUT clear all read notifications including critical/warning (explicit user action)
+router.put('/clear/all-read', auth, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'UPDATE notifications SET is_cleared = TRUE WHERE is_read = TRUE AND is_cleared = FALSE'
+    );
+    res.json({ message: 'All read notifications cleared', cleared: result.rowCount });
+  } catch (err) {
+    console.error('Error clearing all notifications:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });

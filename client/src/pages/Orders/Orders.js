@@ -18,9 +18,77 @@ function Orders() {
   const { reducedMotion } = useAccessibility();
   const [showModal, setShowModal] = useState(false);
   const [statusFilter, setStatusFilter] = useState('all');
-  const filteredOrders = statusFilter === 'all' 
-  ? orders 
-  : orders.filter(o => o.status === statusFilter);
+  const [supplierFilter, setSupplierFilter] = useState('all');
+
+  // Sort state: { column: string, direction: 'asc' | 'desc' | 'none' }
+  const [sort, setSort] = useState({ column: null, direction: 'none' });
+
+  // Get unique supplier names for the filter dropdown
+  const supplierNames = [...new Set(orders.map(o => o.supplier_name).filter(Boolean))].sort();
+
+  const handleSort = (column) => {
+    setSort((prev) => {
+      if (prev.column !== column) return { column, direction: 'asc' };
+      if (prev.direction === 'asc') return { column, direction: 'desc' };
+      if (prev.direction === 'desc') return { column: null, direction: 'none' };
+      return { column, direction: 'asc' };
+    });
+  };
+
+  const getSortIndicator = (column) => {
+    if (sort.column !== column) return '⇅';
+    return sort.direction === 'asc' ? '▲' : '▼';
+  };
+
+  const filteredOrders = (() => {
+    let result = [...orders];
+
+    // Status filter
+    if (statusFilter !== 'all') {
+      result = result.filter(o => o.status === statusFilter);
+    }
+
+    // Supplier filter
+    if (supplierFilter !== 'all') {
+      result = result.filter(o => o.supplier_name === supplierFilter);
+    }
+
+    // Sorting
+    if (sort.column && sort.direction !== 'none') {
+      result.sort((a, b) => {
+        let valA, valB;
+
+        switch (sort.column) {
+          case 'order_id':
+            valA = a.order_id;
+            valB = b.order_id;
+            break;
+          case 'order_date':
+            valA = new Date(a.order_date);
+            valB = new Date(b.order_date);
+            break;
+          case 'expected_delivery':
+            if (!a.expected_delivery) return 1;
+            if (!b.expected_delivery) return -1;
+            valA = new Date(a.expected_delivery);
+            valB = new Date(b.expected_delivery);
+            break;
+          case 'total_cost':
+            valA = parseFloat(a.total_cost) || 0;
+            valB = parseFloat(b.total_cost) || 0;
+            break;
+          default:
+            return 0;
+        }
+
+        if (valA < valB) return sort.direction === 'asc' ? -1 : 1;
+        if (valA > valB) return sort.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return result;
+  })();
 
   const fetchOrders = async () => {
     try {
@@ -96,17 +164,36 @@ function Orders() {
         </button>
       </div>
 
-      <div className="chart-filters" role="group" aria-label="Filter orders">
-        {['all', 'pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map((s) => (
-          <button
-            key={s}
-            className={`filter-btn ${statusFilter === s ? 'active' : ''}`}
-            onClick={() => setStatusFilter(s)}
-            aria-pressed={statusFilter === s}
+      {/* Filters row */}
+      <div className="orders-filters-row">
+        <div className="chart-filters" role="group" aria-label="Filter orders by status">
+          {['all', 'pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map((s) => (
+            <button
+              key={s}
+              className={`filter-btn ${statusFilter === s ? 'active' : ''}`}
+              onClick={() => setStatusFilter(s)}
+              aria-pressed={statusFilter === s}
+            >
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        <div className="supplier-filter">
+          <label htmlFor="supplier-filter" className="sr-only">Filter by supplier</label>
+          <select
+            id="supplier-filter"
+            value={supplierFilter}
+            onChange={(e) => setSupplierFilter(e.target.value)}
+            aria-label="Filter orders by supplier"
+            className="chart-select"
           >
-            {s.charAt(0).toUpperCase() + s.slice(1)}
-          </button>
-        ))}
+            <option value="all">All Suppliers</option>
+            {supplierNames.map((name) => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {orders.length > 0 && (
@@ -155,12 +242,32 @@ function Orders() {
       <table>
         <thead>
           <tr>
-            <th scope="col">Order #</th>
+            <th scope="col">
+              <button className="sort-btn" onClick={() => handleSort('order_id')}
+                      aria-label={`Sort by order number${sort.column === 'order_id' ? ', currently ' + sort.direction : ''}`}>
+                Order # {getSortIndicator('order_id')}
+              </button>
+            </th>
             <th scope="col">Supplier</th>
-            <th scope="col">Date</th>
-            <th scope="col">Expected Delivery</th>
+            <th scope="col">
+              <button className="sort-btn" onClick={() => handleSort('order_date')}
+                      aria-label={`Sort by date${sort.column === 'order_date' ? ', currently ' + sort.direction : ''}`}>
+                Date {getSortIndicator('order_date')}
+              </button>
+            </th>
+            <th scope="col">
+              <button className="sort-btn" onClick={() => handleSort('expected_delivery')}
+                      aria-label={`Sort by expected delivery${sort.column === 'expected_delivery' ? ', currently ' + sort.direction : ''}`}>
+                Expected Delivery {getSortIndicator('expected_delivery')}
+              </button>
+            </th>
             <th scope="col">Status</th>
-            <th scope="col">Total</th>
+            <th scope="col">
+              <button className="sort-btn" onClick={() => handleSort('total_cost')}
+                      aria-label={`Sort by total${sort.column === 'total_cost' ? ', currently ' + sort.direction : ''}`}>
+                Total {getSortIndicator('total_cost')}
+              </button>
+            </th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -228,40 +335,3 @@ function Orders() {
 }
 
 export default Orders;
-
-// Change after testing -
-// Have tester complain about the actions button messing up on delivered/cancelled orders change to removing it
-// Then replace with this
-// {/* <td className="actions">
-//   {order.status !== 'delivered' && order.status !== 'cancelled' && (
-//     <>
-//       {getNextStatus(order.status) && (
-//         <button
-//           className="btn btn-small btn-primary"
-//           onClick={() => handleStatusChange(order.order_id, getNextStatus(order.status))}
-//           aria-label={`Mark order ${order.order_id} as ${getNextStatus(order.status)}`}
-//         >
-//           Mark {getNextStatus(order.status)}
-//         </button>
-//       )}
-//       {order.status === 'pending' && (
-//         <>
-//           <button
-//             className="btn btn-small btn-danger"
-//             onClick={() => handleStatusChange(order.order_id, 'cancelled')}
-//             aria-label={`Cancel order ${order.order_id}`}
-//           >
-//             Cancel
-//           </button>
-//           <button
-//             className="btn btn-small btn-danger"
-//             onClick={() => handleDelete(order.order_id)}
-//             aria-label={`Delete order ${order.order_id}`}
-//           >
-//             Delete
-//           </button>
-//         </>
-//       )}
-//     </>
-//   )}
-// </td> */}

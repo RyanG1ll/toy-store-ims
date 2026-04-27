@@ -151,6 +151,26 @@
 .severity-badge.warning  { background: #fff3e0; color: #e65100; }
 .severity-badge.info     { background: #e3f2fd; color: #1565c0; }
 
+/* Priority notice banner */
+.priority-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  background: #fff3e0;
+  border: 1px solid #f9a825;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #5d4037;
+}
+
+/* Cleared notification styling */
+.notification-item.cleared {
+  opacity: 0.6;
+  border-left: 4px solid var(--muted, #999);
+}
+
 /* ==========================================================================
    DARK THEME overrides
    ========================================================================== */
@@ -197,6 +217,16 @@
   border-color: var(--border-color, #444);
 }
 
+[data-theme="dark"] .priority-notice {
+  background: #3d2e1a;
+  border-color: #f9a825;
+  color: #ffd699;
+}
+
+[data-theme="dark"] .notification-item.cleared {
+  opacity: 0.5;
+}
+
 /* ==========================================================================
    HIGH CONTRAST overrides
    ========================================================================== */
@@ -235,4 +265,50 @@
   background: #000;
   color: #fff;
   border: 2px solid #fff;
+}
+
+[data-theme="high-contrast"] .priority-notice {
+  background: #000;
+  border: 2px solid #ffff00;
+  color: #ffff00;
+}
+
+[data-theme="high-contrast"] .notification-item.cleared {
+  opacity: 0.7;
+  border-left-color: #fff;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  .notifications-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .notifications-actions {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .notifications-actions button {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .notifications-filters {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-item {
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .notification-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+  }
 }

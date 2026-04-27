@@ -98,7 +98,7 @@
 
 .notification-badge {
   display: inline-block;
-  background: #e74c3c;
+  background: #b91c1c;
   color: white;
   font-size: 0.7rem;
   font-weight: 700;
@@ -110,4 +110,117 @@
   padding: 0 4px;
   margin-left: 4px;
   vertical-align: middle;
+}
+
+/* Hamburger button — hidden on desktop */
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1001;
+}
+
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 24px;
+}
+
+.hamburger-icon span {
+  display: block;
+  height: 2px;
+  background: white;
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+
+.hamburger-icon.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-icon.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-icon.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Desktop: nav-menu fills remaining space, links centred */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.nav-links {
+  flex: 1;
+  justify-content: center;
+}
+
+/* ============ RESPONSIVE — MOBILE NAV ============ */
+@media (max-width: 768px) {
+  .navbar {
+    position: relative;
+    flex-wrap: wrap;
+    padding: 0 1rem;
+  }
+
+  .nav-hamburger {
+    display: block;
+  }
+
+  .nav-hamburger:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
+  .nav-menu {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: #2b5f9e;
+    padding: 0.5rem 0 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    position: absolute;
+    top: 60px;
+    left: 0;
+    z-index: 1000;
+  }
+
+  .nav-menu--open {
+    display: flex;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+  }
+
+  .nav-links li {
+    width: 100%;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-radius: 0;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .nav-user {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.75rem 1rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    margin-top: 0.25rem;
+  }
 }

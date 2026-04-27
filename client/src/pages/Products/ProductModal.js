@@ -108,10 +108,9 @@ function ProductModal({ product, onClose, onSave }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay">
       <div
         className="modal-content"
-        onClick={(e) => e.stopPropagation()}
         ref={trapRef}
         role="dialog"
         aria-modal="true"
@@ -140,7 +139,9 @@ function ProductModal({ product, onClose, onSave }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="sku">SKU *</label>
+            <label htmlFor="sku">
+              SKU * <Tooltip content={educationalContent.sku} />
+            </label>
             <input id="sku" name="sku" type="text" value={formData.sku} placeholder="e.g. PRO-001"
                    onChange={handleChange} aria-required="true"
                    aria-invalid={errors.sku ? 'true' : 'false'}

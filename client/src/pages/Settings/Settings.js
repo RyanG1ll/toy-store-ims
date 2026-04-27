@@ -1,10 +1,12 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useAccessibility } from '../../context/AccessibilityContext';
+import { useAuth } from '../../context/AuthContext';
 import './Settings.css';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 function Settings() {
   useDocumentTitle('Settings');
+  const { user } = useAuth();
   const {
     fontSize, setFontSize,
     theme, setTheme,
@@ -13,16 +15,6 @@ function Settings() {
     underlineLinks, setUnderlineLinks,
     resetDefaults
   } = useAccessibility();
-
-  // When Enter is pressed on a label, click the input inside it
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      const input = e.currentTarget.querySelector('input');
-      if (input) {
-        input.click();
-      }
-    }
-  };
 
   return (
     <div className="settings-page">
@@ -44,10 +36,6 @@ function Settings() {
             <label
               key={option.value}
               className="settings-option"
-              tabIndex={0}
-              onKeyDown={handleKeyDown}
-              role="radio"
-              aria-checked={fontSize === option.value}
             >
               <input
                 type="radio"
@@ -55,7 +43,6 @@ function Settings() {
                 value={option.value}
                 checked={fontSize === option.value}
                 onChange={(e) => setFontSize(e.target.value)}
-                tabIndex={-1}
               />
               <span>{option.label}</span>
             </label>
@@ -79,10 +66,6 @@ function Settings() {
             <label
               key={option.value}
               className="settings-option"
-              tabIndex={0}
-              onKeyDown={handleKeyDown}
-              role="radio"
-              aria-checked={String(pageZoom) === option.value}
             >
               <input
                 type="radio"
@@ -90,7 +73,6 @@ function Settings() {
                 value={option.value}
                 checked={String(pageZoom) === option.value}
                 onChange={(e) => setPageZoom(e.target.value)}
-                tabIndex={-1}
               />
               <span>{option.label}</span>
             </label>
@@ -110,10 +92,6 @@ function Settings() {
             <label
               key={option.value}
               className="settings-option settings-option-card"
-              tabIndex={0}
-              onKeyDown={handleKeyDown}
-              role="radio"
-              aria-checked={theme === option.value}
             >
               <input
                 type="radio"
@@ -121,7 +99,6 @@ function Settings() {
                 value={option.value}
                 checked={theme === option.value}
                 onChange={(e) => setTheme(e.target.value)}
-                tabIndex={-1}
               />
               <div>
                 <div className="option-label">{option.label}</div>
@@ -138,16 +115,11 @@ function Settings() {
         <div className="settings-options">
           <label
             className="settings-option settings-option-toggle"
-            tabIndex={0}
-            onKeyDown={handleKeyDown}
-            role="checkbox"
-            aria-checked={reducedMotion}
           >
             <input
               type="checkbox"
               checked={reducedMotion}
               onChange={(e) => setReducedMotion(e.target.checked)}
-              tabIndex={-1}
             />
             <div>
               <div className="option-label">Reduce Motion</div>
@@ -156,16 +128,11 @@ function Settings() {
           </label>
           <label
             className="settings-option settings-option-toggle"
-            tabIndex={0}
-            onKeyDown={handleKeyDown}
-            role="checkbox"
-            aria-checked={underlineLinks}
           >
             <input
               type="checkbox"
               checked={underlineLinks}
               onChange={(e) => setUnderlineLinks(e.target.checked)}
-              tabIndex={-1}
             />
             <div>
               <div className="option-label">Always Underline Links</div>
@@ -173,6 +140,22 @@ function Settings() {
             </div>
           </label>
         </div>
+      </section>
+
+      <section className="settings-section">
+        <h2>Help & Guidance</h2>
+        <p className="settings-help">Replay the onboarding tutorial to revisit how the system works.</p>
+        <button
+          className="tutorial-restart-button"
+          onClick={() => {
+            const key = user ? `tutorialCompleted_${user.user_id}` : 'tutorialCompleted';
+            localStorage.removeItem(key);
+            window.dispatchEvent(new Event('startTutorial'));
+          }}
+          aria-label="Start the guided tutorial"
+        >
+          Start Tutorial
+        </button>
       </section>
 
       <section className="settings-section">

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import ProductModal from './ProductModal';
 import './Products.css';
-import Tooltip from '../../components/tooltip/ToolTip';
-import educationalContent from '../../data/educationalContent';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip as ChartTooltip, Legend, ResponsiveContainer, ReferenceLine
@@ -99,7 +97,7 @@ function Products() {
   return (
     <div className="products-page">
       <div className="products-header">
-        <h1>Products <Tooltip content={educationalContent.abcAnalysis} /></h1>
+        <h1>Products</h1>
         <button className="btn btn-primary" onClick={handleAdd}>
           + Add Product
         </button>

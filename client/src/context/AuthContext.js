@@ -24,8 +24,8 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
-    const response = await api.post('/auth/login', { email, password });
+  const login = async (identifier, password) => {
+    const response = await api.post('/auth/login', { identifier, password });
     const { token, user } = response.data;
 
     // Save to session storage and set auth header

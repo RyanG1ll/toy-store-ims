@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import './Dashboard.css';
-import Tooltip from '../../components/tooltip/ToolTip';
-import educationalContent from '../../data/educationalContent';
 import { useAccessibility } from '../../context/AccessibilityContext';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 import { useAnnounce } from '../../components/LiveAnnouncer';
@@ -104,7 +102,6 @@ function Dashboard() {
                aria-label={`Pie chart showing stock distribution across ${stats.stockByCategory?.length || 0} categories`}>
             <h2>
               Stock by Category
-              <Tooltip content={educationalContent.abcAnalysis} />
             </h2>
             {stats.stockByCategory && stats.stockByCategory.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
@@ -140,7 +137,6 @@ function Dashboard() {
                aria-label="Bar chart showing orders placed per month over the last 6 months">
             <h2>
               Orders Over Time
-              <Tooltip content={educationalContent.demandForecasting} />
             </h2>
             {stats.ordersOverTime && stats.ordersOverTime.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
@@ -164,7 +160,6 @@ function Dashboard() {
              aria-label="Donut chart showing stock health breakdown: healthy, low stock, and out of stock products">
           <h2>
             Stock Status
-            <Tooltip content={educationalContent.reorderPoint} />
           </h2>
           {stats.stockStatusBreakdown ? (
             <ResponsiveContainer width="100%" height={300}>
@@ -204,7 +199,7 @@ function Dashboard() {
       {/* Low stock table */}
       {stats.lowStockItems.length > 0 && (
         <section aria-label="Low stock alerts">
-          <h2>Low Stock Alerts <Tooltip content={educationalContent.reorderPoint} /></h2>
+          <h2>Low Stock Alerts</h2>
           <table>
             <caption className="sr-only">
               Products that are at or below their reorder level
@@ -233,7 +228,7 @@ function Dashboard() {
 
       {/* Recent orders */}
       <section aria-label="Recent orders">
-        <h2>Recent Orders <Tooltip content={educationalContent.leadTime} /></h2>
+        <h2>Recent Orders</h2>
         {stats.recentOrders.length === 0 ? (
           <p>No orders yet.</p>
         ) : (

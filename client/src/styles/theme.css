@@ -17,7 +17,7 @@
   --success: #3cb371;
   --warning: #f5a623;
   --color-warning: #f5a623;
-  --danger: #e74c3c;
+  --danger: #b91c1c;
   --low-stock-bg: #fff8e1;
   --low-stock-text: #1a1f2e;
   --table-header-bg: #f0f2f5;
@@ -326,6 +326,32 @@ label { color: var(--text); font-weight: 500; }
   color: #0a0e14;
 }
 
+/* Recharts tooltip in dark mode */
+[data-theme="dark"] .recharts-default-tooltip {
+  background: #2a2f3a !important;
+  border-color: #444b57 !important;
+  color: #f0f0f0 !important;
+}
+[data-theme="dark"] .recharts-tooltip-label {
+  color: #f0f0f0 !important;
+}
+[data-theme="dark"] .recharts-tooltip-item {
+  color: #d0d5dd !important;
+}
+
+/* Recharts tooltip in high contrast */
+[data-theme="high-contrast"] .recharts-default-tooltip {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+}
+[data-theme="high-contrast"] .recharts-tooltip-label {
+  color: #fff !important;
+}
+[data-theme="high-contrast"] .recharts-tooltip-item {
+  color: #ffff00 !important;
+}
+
 /* HIGH CONTRAST */
 [data-theme="high-contrast"] {
   --bg: #000;
@@ -353,6 +379,32 @@ label { color: var(--text); font-weight: 500; }
 [data-theme="high-contrast"] .low-stock-row,
 [data-theme="high-contrast"] .low-stock-row td {
   background: #000 !important; color: #ffff00 !important; outline: 2px solid #ffff00;
+}
+
+/* Sort button inside table headers */
+.sort-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.sort-btn:hover {
+  text-decoration: underline;
+}
+.sort-btn:focus-visible {
+  outline: 3px solid var(--primary, #4a90d9);
+  outline-offset: 2px;
+}
+[data-theme="high-contrast"] .sort-btn {
+  background: none;
+  border: none;
+  color: #fff;
 }
 
 /* REDUCED MOTION */
@@ -387,3 +439,86 @@ label { color: var(--text); font-weight: 500; }
   z-index: 10000;
 }
 .skip-link:focus { top: 0; }
+
+/* Responsive table wrapper — add .table-responsive around any <table> */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+}
+
+/* ============ RESPONSIVE BREAKPOINTS ============ */
+
+/* Tablet and below */
+@media (max-width: 768px) {
+  .page,
+  .dashboard,
+  .products-page,
+  .orders-page,
+  .suppliers-page,
+  .notifications-page,
+  .forecasting-page,
+  .settings-page {
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-xl);
+  }
+
+  .page-header,
+  .dashboard-header,
+  .products-header,
+  .orders-header,
+  .suppliers-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .dashboard-charts,
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-bar,
+  .chart-filters {
+    flex-wrap: wrap;
+  }
+
+  table {
+    font-size: var(--font-size-sm);
+  }
+
+  th, td {
+    padding: var(--spacing-sm);
+  }
+}
+
+/* Phone */
+@media (max-width: 480px) {
+  .page,
+  .dashboard,
+  .products-page,
+  .orders-page,
+  .suppliers-page,
+  .notifications-page,
+  .forecasting-page,
+  .settings-page {
+    padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-lg);
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .stat-card .stat-number,
+  .stat-card .value {
+    font-size: 1.75rem;
+  }
+
+  h1 { font-size: 1.35rem; }
+  h2 { font-size: 1.1rem; }
+}

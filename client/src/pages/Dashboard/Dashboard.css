@@ -116,3 +116,34 @@
 .low-stock-row {
   background: #fff8e1;
 }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: var(--spacing-md);
+  }
+
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-filters {
+    flex-wrap: wrap;
+  }
+
+  .dashboard table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard h1 {
+    font-size: 1.35rem;
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+  }
+}

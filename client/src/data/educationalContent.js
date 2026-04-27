@@ -62,6 +62,41 @@ const educationalContent = {
     example: 'If you hold £10,000 of toy inventory at a 25% holding cost rate, it costs £2,500/year just to store it — that is rent, insurance, and the risk of toys going out of fashion.',
     realWorld: 'This is why "just-in-time" (JIT) inventory management, pioneered by Toyota, aims to minimise holding costs by receiving goods only when needed.'
   },
+  sku: {
+    term: 'SKU (Stock Keeping Unit)',
+    short: 'A unique code used to identify and track each product in your inventory.',
+    detailed: 'A SKU is a code you create to quickly identify a product. It usually combines letters and numbers that represent something meaningful. Unlike barcodes (set by the manufacturer), SKUs are custom to your store. They make it faster to search, sort, and manage your stock.',
+    example: 'A LEGO City Fire Truck might have SKU "LEG-CITY-042". "LEG" = LEGO, "CITY" = the range, "042" = the product number. A teddy bear might be "PLU-TED-001".',
+    realWorld: 'Every retailer from Amazon to small toy shops uses SKUs. They are essential for barcode scanning, stock counts, and connecting your point-of-sale system to your inventory records.'
+  },
+  daysOfStockLeft: {
+    term: 'Days of Stock Left',
+    short: 'How many days your current stock will last based on recent demand.',
+    detailed: 'This metric divides your current stock level by your average daily demand. It tells you roughly when you will run out if demand stays the same. If the number is lower than your supplier\'s lead time, you need to reorder immediately — otherwise you risk a stockout before the delivery arrives.',
+    example: 'If you have 50 units in stock and sell an average of 5 per day, you have 10 days of stock left. If your supplier takes 7 days to deliver, you should reorder now.',
+    realWorld: 'Supermarkets monitor days of stock left in real time — if a product drops below a threshold (often 3–5 days), an automatic reorder is triggered.'
+  },
+  avgLeadTime: {
+    term: 'Average Lead Time',
+    short: 'The typical number of days between placing an order and receiving it.',
+    detailed: 'Average lead time is calculated from your actual order history with each supplier. It accounts for processing, manufacturing, shipping, and inspection time. A shorter, more consistent lead time means you can hold less safety stock. If lead times are long or unpredictable, you need more buffer stock to avoid running out.',
+    example: 'If your last 3 orders from a supplier arrived in 5, 7, and 6 days, your average lead time is 6 days. You should plan your reorder point around this figure.',
+    realWorld: 'UK toy suppliers typically have lead times of 3–10 days for domestic orders, but importing from overseas manufacturers can take 6–12 weeks.'
+  },
+  orderingCost: {
+    term: 'Ordering Cost',
+    short: 'The estimated annual cost of placing orders with suppliers.',
+    detailed: 'Every time you place an order, there are costs involved: staff time processing the order, communication with the supplier, shipping fees, receiving and inspecting goods, and handling invoices. The annual ordering cost depends on how many orders you place per year. Ordering more frequently increases this cost, while ordering larger quantities less often reduces it — but increases holding costs.',
+    example: 'If it costs £15 to place and process each order and you order 20 times per year, your annual ordering cost is £300. The EOQ formula helps you find the sweet spot.',
+    realWorld: 'Many businesses try to consolidate orders from the same supplier to reduce ordering costs — ordering multiple products in one delivery rather than placing separate orders.'
+  },
+  estDemand: {
+    term: 'Estimated Demand',
+    short: 'A projection of how many units you will need over a given period.',
+    detailed: 'Estimated demand is calculated by looking at your recent order history and projecting it forward. Monthly demand uses your average from the last 6 months; annual demand multiplies this by 12. These estimates feed into the EOQ and reorder point calculations. They work best when demand is relatively stable — seasonal spikes (like Christmas) can make the estimate less accurate.',
+    example: 'If you ordered 120 units of a toy over the last 6 months, the estimated monthly demand is 20 units and the estimated annual demand is 240 units.',
+    realWorld: 'Retailers combine historical demand estimates with external factors — school holidays, marketing campaigns, competitor activity — to create more accurate forecasts.'
+  },
   softDelete: {
     term: 'Soft Delete',
     short: 'Hiding a record instead of permanently removing it.',

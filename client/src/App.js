@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/layout/Navbar';
@@ -15,6 +15,8 @@ import { AccessibilityProvider } from './context/AccessibilityContext';
 import Settings from './pages/Settings/Settings';
 import { LiveAnnouncerProvider } from './components/LiveAnnouncer';
 import SkipLink from './components/SkipLink';
+import Tutorial from './components/tutorial/Tutorial';
+import WelcomePrompt from './components/tutorial/WelcomePrompt';
 
 // Protected route wrapper — redirects to login if not authenticated
 function ProtectedRoute({ children }) {
@@ -25,6 +27,29 @@ function ProtectedRoute({ children }) {
 
 function AppContent() {
   const { user } = useAuth();
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  // Show welcome prompt on first login for non-admin users
+  useEffect(() => {
+    if (user && user.role !== 'admin') {
+      const key = `tutorialCompleted_${user.user_id}`;
+      const completed = localStorage.getItem(key);
+      if (!completed) {
+        setShowWelcome(true);
+      }
+    }
+  }, [user]);
+
+  // Listen for "Start Tutorial" button in Settings
+  useEffect(() => {
+    const handleStart = () => {
+      setShowWelcome(false);
+      setShowTutorial(true);
+    };
+    window.addEventListener('startTutorial', handleStart);
+    return () => window.removeEventListener('startTutorial', handleStart);
+  }, []);
 
   return (
     <>
@@ -45,6 +70,19 @@ function AppContent() {
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         </Routes>
       </main>
+
+      {/* Welcome prompt — asks new non-admin users if they've used the system */}
+      {showWelcome && (
+        <WelcomePrompt onResponse={(startTutorial) => {
+          setShowWelcome(false);
+          if (startTutorial) setShowTutorial(true);
+        }} />
+      )}
+
+      {/* Step-by-step tutorial walkthrough */}
+      {showTutorial && (
+        <Tutorial onComplete={() => setShowTutorial(false)} />
+      )}
     </>
   );
 }

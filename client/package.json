@@ -41,5 +41,14 @@
   "devDependencies": {
     "@axe-core/react": "^4.11.1",
     "@testing-library/react": "^16.3.2"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-router|react-router-dom|recharts|d3-.*|internmap|delaunator|robust-predicates)/)"
+    ],
+    "moduleNameMapper": {
+      "^react-router-dom$": "<rootDir>/node_modules/react-router-dom/dist/index.js",
+      "^react-router$": "<rootDir>/node_modules/react-router/dist/index.js"
+    }
   }
 }

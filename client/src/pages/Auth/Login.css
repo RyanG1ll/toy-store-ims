@@ -128,6 +128,47 @@
   margin-bottom: 4px;
 }
 
+/* Password requirements checklist */
+.password-requirements {
+  list-style: none;
+  padding: 0;
+  margin: -8px 0 0 0;
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.password-requirements li {
+  padding-left: 1.4em;
+  position: relative;
+  color: var(--muted, #666);
+}
+
+.password-requirements li::before {
+  position: absolute;
+  left: 0;
+  font-size: 0.9em;
+}
+
+.password-requirements li.met {
+  color: #2e7d32;
+}
+
+.password-requirements li.met::before {
+  content: '\2713';
+  color: #2e7d32;
+}
+
+.password-requirements li.unmet {
+  color: #b71c1c;
+}
+
+.password-requirements li.unmet::before {
+  content: '\2717';
+  color: #b71c1c;
+}
+
 /* Dark theme */
 [data-theme="dark"] .login-card {
   background: var(--card-bg, #232731);
@@ -145,6 +186,18 @@
   background: #4a1e24;
   border-color: #7a2e34;
   color: #f5b5bb;
+}
+[data-theme="dark"] .password-requirements li.met {
+  color: #81c784;
+}
+[data-theme="dark"] .password-requirements li.met::before {
+  color: #81c784;
+}
+[data-theme="dark"] .password-requirements li.unmet {
+  color: #ef9a9a;
+}
+[data-theme="dark"] .password-requirements li.unmet::before {
+  color: #ef9a9a;
 }
 
 /* High contrast */
@@ -164,4 +217,16 @@
 }
 [data-theme="high-contrast"] .link-button {
   color: #ffff00 !important;
+}
+[data-theme="high-contrast"] .password-requirements li.met {
+  color: #00ff00;
+}
+[data-theme="high-contrast"] .password-requirements li.met::before {
+  color: #00ff00;
+}
+[data-theme="high-contrast"] .password-requirements li.unmet {
+  color: #ff6666;
+}
+[data-theme="high-contrast"] .password-requirements li.unmet::before {
+  color: #ff6666;
 }

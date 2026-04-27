@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import '../Products/ProductModal.css';
+import Tooltip from '../../components/tooltip/ToolTip';
+import educationalContent from '../../data/educationalContent';
 import useFocusTrap from '../../hooks/useFocusTrap';
 import { useAnnounce } from '../../components/LiveAnnouncer';
 
@@ -68,10 +70,9 @@ function SupplierModal({ supplier, onClose, onSave }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay">
       <div
         className="modal-content"
-        onClick={(e) => e.stopPropagation()}
         ref={trapRef}
         role="dialog"
         aria-modal="true"
@@ -117,7 +118,9 @@ function SupplierModal({ supplier, onClose, onSave }) {
                      value={formData.phone} onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label htmlFor="lead_time_days">Lead Time (days)</label>
+              <label htmlFor="lead_time_days">
+                Lead Time (days) <Tooltip content={educationalContent.leadTime} />
+              </label>
               <input id="lead_time_days" name="lead_time_days" type="number" min="1"
                      value={formData.lead_time_days} onChange={handleChange} />
             </div>

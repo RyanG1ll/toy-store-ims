@@ -14,7 +14,12 @@ function Notifications() {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const params = filter === 'unread' ? '?unread_only=true' : '';
+      let params = '';
+      if (filter === 'unread') {
+        params = '?unread_only=true';
+      } else if (filter === 'cleared') {
+        params = '?cleared_only=true';
+      }
       const res = await api.get(`/notifications${params}`);
       setNotifications(res.data);
     } catch (err) {
@@ -85,13 +90,23 @@ function Notifications() {
   };
 
   const handleClearRead = async () => {
-    try {      
-      await api.delete('/notifications/clear/read');
+    if (!window.confirm('Clear all read info messages? Critical and warning messages will stay visible. You can view cleared messages using the "Cleared" filter.')) return;
+    try {
+      await api.put('/notifications/clear/read');
       await fetchNotifications();
     } catch (err) {
       console.error('Failed to clear read notifications:', err);
     }
+  };
 
+  const handleClearAllRead = async () => {
+    if (!window.confirm('Clear ALL read messages including critical and warning? You can still view them using the "Cleared" filter.')) return;
+    try {
+      await api.put('/notifications/clear/all-read');
+      await fetchNotifications();
+    } catch (err) {
+      console.error('Failed to clear all read notifications:', err);
+    }
   };
 
   const handleClick = async (notification) => {
@@ -103,11 +118,9 @@ function Notifications() {
     }
   };
 
-  const filteredNotifications = filter === 'all'
+  const filteredNotifications = (filter === 'all' || filter === 'unread' || filter === 'cleared')
     ? notifications
-    : filter === 'unread'
-      ? notifications
-      : notifications.filter(n => n.severity === filter);
+    : notifications.filter(n => n.severity === filter);
 
   if (loading) return <p>Loading notifications...</p>;
 
@@ -119,14 +132,17 @@ function Notifications() {
           <button onClick={handleMarkAllRead} aria-label="Mark all notifications as read">
             Mark All Read
           </button>
-          <button onClick={handleClearRead} aria-label="Clear all read notifications">
+          <button onClick={handleClearRead} aria-label="Clear read info notifications">
             Clear Read
+          </button>
+          <button onClick={handleClearAllRead} aria-label="Clear all read notifications including critical and warning">
+            Clear All Read
           </button>
         </div>
       </div>
 
       <div className="notifications-filters" role="group" aria-label="Filter notifications">
-        {['all', 'unread', 'critical', 'warning', 'info'].map((f) => (
+        {['all', 'unread', 'critical', 'warning', 'info', 'cleared'].map((f) => (
           <button
             key={f}
             className={`filter-btn ${filter === f ? 'active' : ''}`}
@@ -138,17 +154,23 @@ function Notifications() {
         ))}
       </div>
 
+      {filter !== 'cleared' && notifications.some(n => !n.is_read && (n.severity === 'critical' || n.severity === 'warning')) && (
+        <div className="priority-notice" role="status">
+          <span aria-hidden="true">⚠️</span> Critical and warning messages stay visible until you explicitly clear them using "Clear All Read".
+        </div>
+      )}
+
       {filteredNotifications.length === 0 ? (
         <div className="empty-notifications">
           <div className="empty-icon" aria-hidden="true">🔔</div>
-          <p>No notifications to show</p>
+          <p>{filter === 'cleared' ? 'No cleared messages to show' : 'No notifications to show'}</p>
         </div>
       ) : (
         <div className="notification-list" role="list" aria-label="Notifications">
           {filteredNotifications.map((n) => (
             <div
               key={n.notification_id}
-              className={`notification-item ${!n.is_read ? 'unread' : ''}`}
+              className={`notification-item ${!n.is_read ? 'unread' : ''} ${n.is_cleared ? 'cleared' : ''}`}
               onClick={() => handleClick(n)}
               role="listitem"
               tabIndex={0}

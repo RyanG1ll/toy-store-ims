@@ -92,6 +92,7 @@ function OrderModal({ onClose, onSave }) {
     try {
       await api.post('/orders', {
         supplier_id: formData.supplier_id,
+        expected_delivery: formData.expected_delivery || null,
         notes: formData.notes,
         items: items.map(item => ({
           product_id: item.product_id,
@@ -109,10 +110,9 @@ function OrderModal({ onClose, onSave }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay">
       <div
         className="modal-content modal-wide"
-        onClick={(e) => e.stopPropagation()}
         ref={trapRef}
         role="dialog"
         aria-modal="true"
@@ -144,6 +144,7 @@ function OrderModal({ onClose, onSave }) {
             <div className="form-group">
               <label htmlFor="expected_delivery">Expected Delivery</label>
               <input id="expected_delivery" name="expected_delivery" type="date"
+                     min={new Date().toISOString().split('T')[0]}
                      value={formData.expected_delivery} onChange={handleChange} />
             </div>
           </div>

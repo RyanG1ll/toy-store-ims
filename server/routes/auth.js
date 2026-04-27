@@ -12,7 +12,12 @@ router.post('/register',
   [
     body('username').notEmpty().trim().withMessage('Username is required'),
     body('email').isEmail().withMessage('Valid email is required'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('password')
+      .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+      .matches(/[A-Z]/).withMessage('Password must contain an uppercase letter')
+      .matches(/[a-z]/).withMessage('Password must contain a lowercase letter')
+      .matches(/[0-9]/).withMessage('Password must contain a number')
+      .matches(/[!@#$%^&*(),.?":{}|<>]/).withMessage('Password must contain a special character'),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -67,7 +72,7 @@ router.post('/register',
 // Also returns the same message for both invalid email and password to prevent user enumeration attacks.
 router.post('/login',
   [
-    body('email').isEmail().withMessage('Valid email is required'),
+    body('identifier').notEmpty().trim().withMessage('Email or username is required'),
     body('password').notEmpty().withMessage('Password is required'),
   ],
   async (req, res) => {
@@ -77,15 +82,15 @@ router.post('/login',
     }
 
     try {
-      const { email, password } = req.body;
+      const { identifier, password } = req.body;
 
-      // Find user by email
+      // Find user by email or username
       const result = await pool.query(
-        'SELECT * FROM users WHERE email = $1',
-        [email]
+        'SELECT * FROM users WHERE email = $1 OR username = $1',
+        [identifier]
       );
       if (result.rows.length === 0) {
-        return res.status(400).json({ error: 'Invalid email or password' });
+        return res.status(400).json({ error: 'Invalid email/username or password' });
       }
 
       const user = result.rows[0];
@@ -93,7 +98,7 @@ router.post('/login',
       // Compare password with hash
       const isMatch = await bcrypt.compare(password, user.password_hash);
       if (!isMatch) {
-        return res.status(400).json({ error: 'Invalid email or password' });
+        return res.status(400).json({ error: 'Invalid email/username or password' });
       }
 
       // Create JWT token

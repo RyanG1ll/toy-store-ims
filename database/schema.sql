@@ -93,6 +93,7 @@ CREATE TABLE notifications (
     message TEXT NOT NULL,
     link VARCHAR(255),
     is_read BOOLEAN DEFAULT FALSE,
+    is_cleared BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

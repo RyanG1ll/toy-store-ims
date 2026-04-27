@@ -105,6 +105,22 @@
   margin-top: 0.15rem;
 }
 
+/* Tutorial restart button */
+.tutorial-restart-button {
+  background: var(--primary, #2b6cb0);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+.tutorial-restart-button:hover {
+  background: var(--primary-hover, #1e5a96);
+}
+
 /* Reset button */
 .reset-button {
   background: transparent;
@@ -150,4 +166,26 @@
 [data-theme="high-contrast"] .settings-option:focus-visible {
   outline: 3px solid #ffff00;
   outline-offset: 2px;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  .settings-page {
+    padding: var(--spacing-md);
+  }
+
+  .settings-section {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-option {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .settings-option-card,
+  .settings-option-toggle {
+    padding: 0.75rem;
+  }
 }

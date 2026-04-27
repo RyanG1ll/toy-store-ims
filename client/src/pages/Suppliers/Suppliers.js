@@ -12,6 +12,7 @@ function Suppliers() {
   const [showModal, setShowModal] = useState(false);
   const [editingSupplier, setEditingSupplier] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState('none');
 
   const fetchSuppliers = async () => {
     try {
@@ -67,6 +68,15 @@ function Suppliers() {
     fetchSuppliers();
   };
 
+  const sortedSuppliers = (() => {
+    if (sortOrder === 'none') return suppliers;
+    return [...suppliers].sort((a, b) => {
+      const aVal = parseInt(a.lead_time_days) || 0;
+      const bVal = parseInt(b.lead_time_days) || 0;
+      return sortOrder === 'asc' ? aVal - bVal : bVal - aVal;
+    });
+  })();
+
   if (loading) return <p>Loading suppliers...</p>;
   if (error) return <p role="alert">{error}</p>;
 
@@ -98,15 +108,23 @@ function Suppliers() {
             <th scope="col">Contact</th>
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
-            <th scope="col">Lead Time (days)</th>
+            <th scope="col">
+              <button
+                className="sort-btn"
+                onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : prev === 'desc' ? 'none' : 'asc')}
+                aria-label={`Sort by lead time${sortOrder === 'asc' ? ', currently ascending' : sortOrder === 'desc' ? ', currently descending' : ''}`}
+              >
+                Lead Time (days) {sortOrder === 'asc' ? '▲' : sortOrder === 'desc' ? '▼' : '⇅'}
+              </button>
+            </th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {suppliers.length === 0 ? (
+          {sortedSuppliers.length === 0 ? (
             <tr><td colSpan="6">No suppliers found.</td></tr>
           ) : (
-            suppliers.map((supplier) => (
+            sortedSuppliers.map((supplier) => (
               <tr key={supplier.supplier_id}>
                 <td>{supplier.name}</td>
                 <td>{supplier.contact_name}</td>
