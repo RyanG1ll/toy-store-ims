@@ -1,4 +1,3 @@
-// Mock dependencies
 jest.mock('../config/db', () => ({
   query: jest.fn(),
 }));

@@ -22,7 +22,6 @@ const { sendVerificationEmail } = require('../utils/email');
 process.env.JWT_SECRET = 'test-secret-key';
 process.env.CLIENT_URL = 'http://localhost:3000';
 
-// Helper: create mock Express req/res objects
 function mockReqRes(body = {}, query = {}) {
   return {
     req: { body, query, header: jest.fn() },
@@ -122,8 +121,7 @@ describe('Auth Routes — Login Logic', () => {
   });
 
   test('should use generic error message for invalid credentials', () => {
-    // The route uses the same message for both "user not found" and "wrong password"
-    // to prevent account enumeration
+    // The route uses the same message for both "user not found" and "wrong password" to prevent account enumeration
     const genericError = 'Invalid email/username or password';
     expect(genericError).not.toContain('not found');
     expect(genericError).not.toContain('wrong password');

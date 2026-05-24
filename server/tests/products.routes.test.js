@@ -1,4 +1,3 @@
-// Mock dependencies before importing
 jest.mock('../config/db', () => ({
   query: jest.fn(),
 }));

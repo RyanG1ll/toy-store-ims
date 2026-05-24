@@ -1,4 +1,3 @@
-// Mock the database pool before importing the audit module
 jest.mock('../config/db', () => ({
   query: jest.fn(),
 }));
