@@ -171,9 +171,7 @@
   border-left: 4px solid var(--muted, #999);
 }
 
-/* ==========================================================================
-   DARK THEME overrides
-   ========================================================================== */
+/* Dark mode overrides */
 [data-theme="dark"] .notification-item {
   background: var(--card-bg, #232731);
   border-color: var(--border-color, #383d47);
@@ -227,9 +225,7 @@
   opacity: 0.5;
 }
 
-/* ==========================================================================
-   HIGH CONTRAST overrides
-   ========================================================================== */
+/* High contrast mode overrides */
 [data-theme="high-contrast"] .notification-item {
   background: #000;
   border: 2px solid #fff;
@@ -278,7 +274,7 @@
   border-left-color: #fff;
 }
 
-/* ============ RESPONSIVE ============ */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .notifications-header {
     flex-direction: column;

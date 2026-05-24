@@ -7,6 +7,10 @@ import Products from './pages/Products/Products';
 import Suppliers from './pages/Suppliers/Suppliers';
 import Orders from './pages/Orders/Orders';
 import Login from './pages/Auth/Login';
+import EmailVerification from './pages/Auth/EmailVerification';
+import ForgotPassword from './pages/Auth/ForgotPassword';
+import ResetPassword from './pages/Auth/ResetPassword';
+import AccountDetails from './pages/Account/AccountDetails';
 import Notifications from './pages/Notifications/Notifications';
 import Forecasting from './pages/Forecasting/Forecasting';
 import NotificationPopup from './components/notificationpopup/NotificationPopup';
@@ -18,7 +22,7 @@ import SkipLink from './components/SkipLink';
 import Tutorial from './components/tutorial/Tutorial';
 import WelcomePrompt from './components/tutorial/WelcomePrompt';
 
-// Protected route wrapper — redirects to login if not authenticated
+// Protected route wrapper, it redirects to login if not authenticated
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return <p>Loading...</p>;
@@ -61,6 +65,10 @@ function AppContent() {
       <main id="main-content" role="main">
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/verify-email" element={<EmailVerification />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/account" element={<ProtectedRoute><AccountDetails /></ProtectedRoute>} />
           <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/products" element={<ProtectedRoute><Products /></ProtectedRoute>} />
           <Route path="/suppliers" element={<ProtectedRoute><Suppliers /></ProtectedRoute>} />

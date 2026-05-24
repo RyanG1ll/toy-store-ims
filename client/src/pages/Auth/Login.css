@@ -1,4 +1,3 @@
-/* Login.css — sign-in / sign-up page */
 
 .login-page {
   min-height: 100vh;
@@ -16,7 +15,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   padding: 44px 40px 36px;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
 }
 
 .login-card h1 {
@@ -45,6 +44,14 @@
   gap: 6px;
 }
 
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+.form-row .form-group {
+  flex: 1;
+}
+
 .login-card label {
   font-weight: 600;
   font-size: 0.88rem;
@@ -70,7 +77,6 @@
   box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.2);
 }
 
-/* Submit button */
 .login-card .btn-primary,
 .login-card .btn-full,
 .login-card button[type="submit"] {
@@ -88,6 +94,33 @@
 }
 .login-card button[type="submit"]:hover {
   background: var(--primary-hover, #3a7bb8);
+}
+
+.btn-secondary {
+  margin-top: 6px;
+  padding: 12px;
+  background: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s;
+}
+.btn-secondary:hover {
+  background: #5a6268;
+}
+.btn-secondary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Forgot password link */
+.forgot-password-link {
+  text-align: center;
+  margin-top: 4px;
 }
 
 /* Toggle text: "Don't have an account? Create one" */
@@ -128,11 +161,64 @@
   margin-bottom: 4px;
 }
 
+/* Success message */
+.success-message {
+  background: #e8f5e9;
+  color: #1b5e20;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid #a5d6a7;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+/* Info message (for resend verification feedback) */
+.info-message {
+  background: #e3f2fd;
+  color: #0d47a1;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid #90caf9;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* Password strength meter */
+.password-strength-meter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: -8px 0 0 0;
+}
+
+.strength-bar-track {
+  flex: 1;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.strength-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  min-width: 80px;
+  text-align: right;
+}
+
 /* Password requirements checklist */
 .password-requirements {
   list-style: none;
   padding: 0;
-  margin: -8px 0 0 0;
+  margin: -4px 0 0 0;
   font-size: 0.82rem;
   display: flex;
   flex-direction: column;
@@ -169,8 +255,102 @@
   color: #b71c1c;
 }
 
-/* Dark theme */
-[data-theme="dark"] .login-card {
+/* Email verification prompt (after sign-up, before verification) */
+.verification-info {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.verification-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.verification-info p {
+  color: var(--text, #333);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+.verification-email {
+  font-weight: 600;
+  color: var(--primary, #4a90d9);
+  font-size: 1rem;
+}
+
+/* Email verification result page (after user clicks verification link) */
+.verification-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg, #f5f7fa);
+  padding: 20px;
+}
+
+.verification-card {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #d8dce3);
+  border-radius: var(--radius, 10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 44px 40px 36px;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+}
+
+.verification-card h1 {
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+  color: var(--text, #222);
+}
+
+.verification-card p {
+  color: var(--muted, #555);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.verification-card .success-icon {
+  font-size: 3rem;
+  color: #2e7d32;
+  margin-bottom: 12px;
+}
+
+.verification-card .error-icon {
+  font-size: 3rem;
+  color: #d32f2f;
+  margin-bottom: 12px;
+}
+
+.verification-card .loading-spinner {
+  font-size: 1rem;
+  color: var(--muted, #666);
+}
+
+.verification-card .btn-primary {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 28px;
+  background: var(--primary, #4a90d9);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.verification-card .btn-primary:hover {
+  background: var(--primary-hover, #3a7bb8);
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .login-card,
+[data-theme="dark"] .verification-card {
   background: var(--card-bg, #232731);
   border-color: var(--border-color, #383d47);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
@@ -187,6 +367,19 @@
   border-color: #7a2e34;
   color: #f5b5bb;
 }
+[data-theme="dark"] .success-message {
+  background: #1b3d1e;
+  border-color: #2e7d32;
+  color: #a5d6a7;
+}
+[data-theme="dark"] .info-message {
+  background: #0d2137;
+  border-color: #1565c0;
+  color: #90caf9;
+}
+[data-theme="dark"] .strength-bar-track {
+  background: #444b57;
+}
 [data-theme="dark"] .password-requirements li.met {
   color: #81c784;
 }
@@ -199,9 +392,16 @@
 [data-theme="dark"] .password-requirements li.unmet::before {
   color: #ef9a9a;
 }
+[data-theme="dark"] .btn-secondary {
+  background: #4a4f5a;
+}
+[data-theme="dark"] .btn-secondary:hover {
+  background: #5a6068;
+}
 
-/* High contrast */
-[data-theme="high-contrast"] .login-card {
+/* High contrast mode overrides */
+[data-theme="high-contrast"] .login-card,
+[data-theme="high-contrast"] .verification-card {
   background: #000;
   border: 2px solid #fff;
 }
@@ -210,13 +410,18 @@
   color: #fff;
   border: 2px solid #fff;
 }
-[data-theme="high-contrast"] .login-card button[type="submit"] {
+[data-theme="high-contrast"] .login-card button[type="submit"],
+[data-theme="high-contrast"] .verification-card .btn-primary {
   background: #ffff00;
   color: #000;
   border: 2px solid #fff;
 }
 [data-theme="high-contrast"] .link-button {
   color: #ffff00 !important;
+}
+[data-theme="high-contrast"] .strength-bar-track {
+  background: #333;
+  border: 1px solid #fff;
 }
 [data-theme="high-contrast"] .password-requirements li.met {
   color: #00ff00;
@@ -229,4 +434,9 @@
 }
 [data-theme="high-contrast"] .password-requirements li.unmet::before {
   color: #ff6666;
+}
+[data-theme="high-contrast"] .btn-secondary {
+  background: #000;
+  color: #ffff00;
+  border: 2px solid #fff;
 }

@@ -117,7 +117,7 @@
   background: #fff8e1;
 }
 
-/* ============ RESPONSIVE ============ */
+ /* Responsive adjustments */
 @media (max-width: 768px) {
   .dashboard {
     padding: var(--spacing-md);

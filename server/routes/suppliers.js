@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const { body, validationResult } = require('express-validator');
+const { logAuditEvent } = require('../utils/audit');
 const auth = require('../middleware/auth');
 
 // GET all suppliers
@@ -59,6 +60,9 @@ router.post('/', auth,
          VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
         [name, contact_name, email, phone, address, lead_time_days || 7]
       );
+
+      await logAuditEvent(req.user.user_id, 'SUPPLIER_CREATE', `Added supplier: "${name}"`);
+
       res.status(201).json(result.rows[0]);
     } catch (err) {
       console.error(err.message);
@@ -81,6 +85,9 @@ router.put('/:id', auth, async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Supplier not found' });
     }
+
+    await logAuditEvent(req.user.user_id, 'SUPPLIER_UPDATE', `Updated supplier #${req.params.id}: "${name}"`);
+
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
@@ -90,10 +97,16 @@ router.put('/:id', auth, async (req, res) => {
 // DELETE (soft delete)
 router.delete('/:id', auth, async (req, res) => {
   try {
+    const supplier = await pool.query('SELECT name FROM suppliers WHERE supplier_id = $1', [req.params.id]);
+    const supplierName = supplier.rows.length > 0 ? supplier.rows[0].name : `#${req.params.id}`;
+
     await pool.query(
       'UPDATE suppliers SET is_active = FALSE WHERE supplier_id = $1',
       [req.params.id]
     );
+
+    await logAuditEvent(req.user.user_id, 'SUPPLIER_DELETE', `Deactivated supplier: "${supplierName}" (ID: ${req.params.id})`);
+
     res.json({ message: 'Supplier deactivated' });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });

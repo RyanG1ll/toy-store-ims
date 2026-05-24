@@ -308,7 +308,7 @@
   transition: none;
 }
 
-/* ============ RESPONSIVE ============ */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .forecasting-controls {
     flex-direction: column;

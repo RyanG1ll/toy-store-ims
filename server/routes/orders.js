@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../config/db');
 const { body, validationResult } = require('express-validator');
 const { createNotification } = require('../utils/notify');
+const { logAuditEvent } = require('../utils/audit');
 const auth = require('../middleware/auth');
 
 // GET all orders
@@ -107,6 +108,8 @@ router.post('/', auth,
 
       await client.query('COMMIT');
 
+      await logAuditEvent(req.user.user_id, 'ORDER_CREATE', `Created order #${order.order_id} (${items.length} items, total: $${total_cost.toFixed(2)})`);
+
       // Auto-generate notification for new order
       await createNotification(
         'new_order',
@@ -198,6 +201,8 @@ router.put('/:id/status', auth, async (req, res) => {
         }
     }
 
+    await logAuditEvent(req.user.user_id, 'ORDER_STATUS', `Order #${req.params.id} status changed to "${status}"`);
+
     // Auto-generate notification for status change
     const severityMap = { confirmed: 'info', shipped: 'info', delivered: 'info', cancelled: 'warning' };
     await createNotification(
@@ -231,6 +236,9 @@ router.delete('/:id', auth, async (req, res) => {
     }
 
     await pool.query('DELETE FROM orders WHERE order_id = $1', [req.params.id]);
+
+    await logAuditEvent(req.user.user_id, 'ORDER_DELETE', `Deleted pending order #${req.params.id}`);
+
     res.json({ message: 'Order deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });

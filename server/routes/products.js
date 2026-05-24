@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../config/db');
 const { body, validationResult } = require('express-validator');
 const { createNotification } = require('../utils/notify');
+const { logAuditEvent } = require('../utils/audit');
 const auth = require('../middleware/auth');
 
 // GET all products with optional filters
@@ -106,6 +107,8 @@ router.post('/', auth,
          reorder_level || 10, reorder_quantity || 50, age_range]
       );
       
+      await logAuditEvent(req.user.user_id, 'PRODUCT_CREATE', `Added product: "${result.rows[0].name}" (SKU: ${sku})`);
+
       await createNotification(
         'new_product',
         'info',
@@ -165,6 +168,8 @@ router.put('/:id', auth, async (req, res) => {
       return res.status(404).json({ error: 'Product not found' });
     }
 
+    await logAuditEvent(req.user.user_id, 'PRODUCT_UPDATE', `Updated product #${req.params.id}: "${name}"`);
+
     // Check if stock was updated to a low level
     const updated = result.rows[0];
     if (updated.quantity_in_stock <= updated.reorder_level) {
@@ -191,10 +196,16 @@ router.put('/:id', auth, async (req, res) => {
 // If there's a server error, it returns a 500 error.
 router.delete('/:id', auth, async (req, res) => {
   try {
+    const product = await pool.query('SELECT name FROM products WHERE product_id = $1', [req.params.id]);
+    const productName = product.rows.length > 0 ? product.rows[0].name : `#${req.params.id}`;
+
     await pool.query(
       'UPDATE products SET is_active = FALSE WHERE product_id = $1',
       [req.params.id]
     );
+
+    await logAuditEvent(req.user.user_id, 'PRODUCT_DELETE', `Deactivated product: "${productName}" (ID: ${req.params.id})`);
+
     res.json({ message: 'Product deactivated' });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });

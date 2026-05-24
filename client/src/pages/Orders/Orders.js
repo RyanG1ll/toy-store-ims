@@ -317,6 +317,9 @@ function Orders() {
                       </button>
                     </>
                   )}
+                  {(order.status === 'delivered' || order.status === 'cancelled') && (
+                    <span className="no-actions" aria-label="No actions available">—</span>
+                  )}
                 </td>
               </tr>
             ))

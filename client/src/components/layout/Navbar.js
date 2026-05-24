@@ -78,7 +78,9 @@ function Navbar() {
           <li><NavLink to="/settings">Settings</NavLink></li>
         </ul>
         <div className="nav-user">
-          <span className="nav-username">{user?.username}</span>
+          <NavLink to="/account" className="nav-username-link" aria-label="View your account details">
+            {user?.first_name ? `${user.first_name} ${user.last_name}` : user?.username}
+          </NavLink>
           <button onClick={() => { if (window.confirm('Are you sure you want to sign out?')) logout(); }} className="nav-logout">Sign Out</button>
         </div>
       </div>

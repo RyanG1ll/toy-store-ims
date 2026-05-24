@@ -34,7 +34,7 @@
   color: var(--color-text-secondary);
 }
 
-/* ============ RESPONSIVE ============ */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .suppliers-header {
     flex-direction: column;

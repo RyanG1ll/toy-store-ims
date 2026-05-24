@@ -2,9 +2,16 @@
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     role VARCHAR(20) DEFAULT 'staff' CHECK (role IN ('admin', 'staff')),
+    email_verified BOOLEAN DEFAULT FALSE,
+    verification_token VARCHAR(255),
+    verification_expires TIMESTAMP,
+    reset_token VARCHAR(255),
+    reset_expires TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -85,6 +92,7 @@ CREATE TABLE stock_movements (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Notifications table
 CREATE TABLE notifications (
     notification_id SERIAL PRIMARY KEY,
     type VARCHAR(50) NOT NULL,
@@ -96,6 +104,19 @@ CREATE TABLE notifications (
     is_cleared BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Audit log records security-relevant events (logins, password changes, account actions)
+CREATE TABLE audit_log (
+    log_id     SERIAL PRIMARY KEY,
+    user_id    INTEGER REFERENCES users(user_id) ON DELETE SET NULL,
+    action     VARCHAR(50)  NOT NULL,
+    detail     TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_audit_log_user ON audit_log(user_id);
+CREATE INDEX idx_audit_log_action ON audit_log(action);
+CREATE INDEX idx_audit_log_created ON audit_log(created_at DESC);
 
 -- Indexes for performance
 CREATE INDEX idx_products_supplier ON products(supplier_id);

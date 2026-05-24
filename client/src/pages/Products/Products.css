@@ -114,6 +114,14 @@
 .btn-small {
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: var(--font-size-sm, 0.875rem);
+  white-space: nowrap;
+}
+
+/* Prevent button text from overflowing at large/extra-large text sizes */
+[data-font-size="large"] .btn-small,
+[data-font-size="xlarge"] .btn-small {
+  font-size: 0.85rem;
+  padding: 6px 10px;
 }
 
 .products-chart {
@@ -145,9 +153,7 @@
   color: var(--text, #222);
 }
 
-/* ==========================================================================
-   DARK THEME
-   ========================================================================== */
+/* Dark mode overrides */
 [data-theme="dark"] .products-page tr.low-stock,
 [data-theme="dark"] .products-page tr.low-stock td {
   background: #4a3e1a !important;
@@ -160,9 +166,7 @@
   border-color: var(--border-color, #444);
 }
 
-/* ==========================================================================
-   HIGH CONTRAST
-   ========================================================================== */
+/* High contrast mode overrides */
 [data-theme="high-contrast"] .products-page tr.low-stock,
 [data-theme="high-contrast"] .products-page tr.low-stock td {
   background: #000 !important;
@@ -170,7 +174,7 @@
   outline: 2px solid #ffff00;
 }
 
-/* ============ RESPONSIVE ============ */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .products-header {
     flex-direction: column;

@@ -1,6 +1,3 @@
-/* filters.css — shared styling for filter button groups
-   Import this in Dashboard, Products, and Orders, OR paste into theme.css.
-*/
 
 .filter-bar {
   display: flex;
