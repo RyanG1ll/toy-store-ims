@@ -10,7 +10,6 @@
   color: var(--text, #222);
 }
 
-/* ─── Skeleton Loading ─── */
 .skeleton-section {
   min-height: 320px;
 }
