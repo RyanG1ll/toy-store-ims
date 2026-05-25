@@ -4,6 +4,7 @@ An educational and accessible inventory management system built for a toy store 
 
 **Student:** Ryan Gill (Registration: 100416051)
 **Supervisor:** Debbie Taylor
+**Module Organiser:** Mohsin Raza
 
 ## About
 
