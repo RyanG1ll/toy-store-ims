@@ -44,7 +44,7 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "node_modules/(?!(react-router|react-router-dom|recharts|d3-.*|internmap|delaunator|robust-predicates)/)"
+      "node_modules/(?!(react-router|react-router-dom|recharts|d3-.*|internmap|delaunator|robust-predicates|axios)/)"
     ],
     "moduleNameMapper": {
       "^react-router-dom$": "<rootDir>/node_modules/react-router-dom/dist/index.js",

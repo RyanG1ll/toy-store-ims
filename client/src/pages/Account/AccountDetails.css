@@ -60,7 +60,6 @@
   gap: 24px;
 }
 
-/* ─── Section Card ─── */
 .account-section {
   background: var(--card-bg, #ffffff);
   border: 1px solid var(--border-color, #d8dce3);
@@ -77,7 +76,6 @@
   padding-bottom: 12px;
 }
 
-/* ─── Profile Details ─── */
 .profile-details {
   display: flex;
   flex-direction: column;
@@ -119,7 +117,6 @@
   color: #1565c0;
 }
 
-/* ─── Profile Actions ─── */
 .profile-actions {
   display: flex;
   gap: 12px;
@@ -156,7 +153,6 @@
   background: #5a6268;
 }
 
-/* ─── Edit Form ─── */
 .edit-form,
 .password-form {
   display: flex;
@@ -264,7 +260,7 @@
   cursor: not-allowed;
 }
 
-/* Password strength meter (reuse from Login.css) */
+/* Password strength meter */
 .password-strength-meter {
   display: flex;
   align-items: center;
@@ -293,7 +289,6 @@
   text-align: right;
 }
 
-/* ─── Messages ─── */
 .account-section .error-message {
   background: #fde8e8;
   color: #9b1c1c;
@@ -316,7 +311,6 @@
   margin-bottom: 16px;
 }
 
-/* ─── Audit Log ─── */
 .audit-description {
   color: var(--muted, #666);
   font-size: 0.9rem;
@@ -459,7 +453,6 @@
   color: var(--muted, #666);
 }
 
-/* ─── Dark Theme ─── */
 [data-theme="dark"] .account-section {
   background: var(--card-bg, #232731);
   border-color: var(--border-color, #383d47);
@@ -559,7 +552,6 @@
 [data-theme="dark"] .action-badge.action-order-status { background: #3e2800; color: #ffcc80; }
 [data-theme="dark"] .action-badge.action-order-delete { background: #4a1e24; color: #f5b5bb; }
 
-/* ─── High Contrast Theme ─── */
 [data-theme="high-contrast"] .account-section {
   background: #000;
   border: 2px solid #fff;
@@ -644,7 +636,6 @@
   color: #fff;
 }
 
-/* ─── Responsive ─── */
 @media (max-width: 768px) {
   .account-page {
     padding: 16px;

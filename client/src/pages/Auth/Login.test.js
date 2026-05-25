@@ -18,6 +18,18 @@ jest.mock('../../context/AuthContext', () => ({
   }),
 }));
 
+// Mock API for direct registration calls
+const mockPost = jest.fn();
+jest.mock('../../services/api', () => ({
+  __esModule: true,
+  default: {
+    post: (...args) => mockPost(...args),
+    get: jest.fn(),
+    defaults: { headers: { common: {} } },
+    interceptors: { response: { use: jest.fn() } },
+  },
+}));
+
 // Import after mocks
 const Login = require('./Login').default;
 
@@ -28,6 +40,7 @@ function renderLogin() {
 describe('Login Page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockPost.mockReset();
   });
 
   // ==================== RENDERING ====================
@@ -167,9 +180,11 @@ describe('Login Page', () => {
     renderLogin();
     await userEvent.click(screen.getByRole('button', { name: /create one/i }));
 
+    await userEvent.type(screen.getByLabelText(/first name/i), 'Test');
+    await userEvent.type(screen.getByLabelText(/last name/i), 'User');
+    await userEvent.type(screen.getByLabelText(/username/i), 'testuser');
     await userEvent.type(screen.getByLabelText('Email'), 'notanemail');
     await userEvent.type(screen.getByLabelText(/password/i), 'Test1234!');
-    await userEvent.type(screen.getByLabelText(/username/i), 'testuser');
     await userEvent.click(screen.getByRole('button', { name: /create account/i }));
 
     expect(screen.getByRole('alert')).toHaveTextContent(/please enter a valid email address/i);
@@ -179,6 +194,8 @@ describe('Login Page', () => {
     renderLogin();
     await userEvent.click(screen.getByRole('button', { name: /create one/i }));
 
+    await userEvent.type(screen.getByLabelText(/first name/i), 'Test');
+    await userEvent.type(screen.getByLabelText(/last name/i), 'User');
     await userEvent.type(screen.getByLabelText('Email'), 'test@example.com');
     await userEvent.type(screen.getByLabelText(/password/i), 'Test1234!');
     await userEvent.click(screen.getByRole('button', { name: /create account/i }));
@@ -190,6 +207,8 @@ describe('Login Page', () => {
     renderLogin();
     await userEvent.click(screen.getByRole('button', { name: /create one/i }));
 
+    await userEvent.type(screen.getByLabelText(/first name/i), 'Test');
+    await userEvent.type(screen.getByLabelText(/last name/i), 'User');
     await userEvent.type(screen.getByLabelText(/username/i), 'testuser');
     await userEvent.type(screen.getByLabelText('Email'), 'test@example.com');
     await userEvent.type(screen.getByLabelText(/password/i), 'short');
@@ -283,7 +302,7 @@ describe('Login Page', () => {
     await userEvent.click(screen.getByRole('button', { name: /create one/i }));
 
     const passwordInput = screen.getByLabelText(/password/i);
-    expect(passwordInput).toHaveAttribute('aria-describedby', 'password-requirements');
+    expect(passwordInput).toHaveAttribute('aria-describedby', 'password-requirements password-strength');
   });
 
   test('password field has no aria-describedby in login mode', () => {
@@ -294,19 +313,28 @@ describe('Login Page', () => {
 
   // ==================== SUCCESSFUL REGISTRATION ====================
 
-  test('calls register with correct args and navigates on success', async () => {
-    mockRegister.mockResolvedValue();
+  test('calls register with correct args and shows verification message on success', async () => {
+    mockPost.mockResolvedValue({
+      data: { requiresVerification: true, message: 'Verification email sent' },
+    });
     renderLogin();
 
     await userEvent.click(screen.getByRole('button', { name: /create one/i }));
+    await userEvent.type(screen.getByLabelText(/first name/i), 'New');
+    await userEvent.type(screen.getByLabelText(/last name/i), 'User');
     await userEvent.type(screen.getByLabelText(/username/i), 'newuser');
     await userEvent.type(screen.getByLabelText('Email'), 'new@example.com');
     await userEvent.type(screen.getByLabelText(/password/i), 'StrongPass1!');
     await userEvent.click(screen.getByRole('button', { name: /create account/i }));
 
     await waitFor(() => {
-      expect(mockRegister).toHaveBeenCalledWith('newuser', 'new@example.com', 'StrongPass1!');
-      expect(mockNavigate).toHaveBeenCalledWith('/');
+      expect(mockPost).toHaveBeenCalledWith('/auth/register', {
+        firstName: 'New',
+        lastName: 'User',
+        username: 'newuser',
+        email: 'new@example.com',
+        password: 'StrongPass1!',
+      });
     });
   });
 });

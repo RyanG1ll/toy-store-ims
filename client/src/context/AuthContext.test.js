@@ -27,7 +27,7 @@ function TestConsumer() {
       <span data-testid="loading">{String(loading)}</span>
       <span data-testid="user">{user ? JSON.stringify(user) : 'null'}</span>
       <button onClick={() => login('testuser', 'password123')}>Login</button>
-      <button onClick={() => register('newuser', 'new@test.com', 'Pass1!')}>Register</button>
+      <button onClick={() => register('New', 'User', 'newuser', 'new@test.com', 'Pass1!')}>Register</button>
       <button onClick={() => logout()}>Logout</button>
     </div>
   );
@@ -105,10 +105,9 @@ describe('AuthContext', () => {
 
   // ==================== REGISTER ====================
 
-  test('register stores token and user in sessionStorage', async () => {
-    const mockUser = { user_id: 2, username: 'newuser', role: 'staff' };
+  test('register calls API but does not store token (requires email verification)', async () => {
     mockPost.mockResolvedValue({
-      data: { token: 'register-token', user: mockUser },
+      data: { message: 'Verification email sent' },
     });
 
     renderWithProvider();
@@ -122,12 +121,15 @@ describe('AuthContext', () => {
     });
 
     expect(mockPost).toHaveBeenCalledWith('/auth/register', {
+      firstName: 'New',
+      lastName: 'User',
       username: 'newuser',
       email: 'new@test.com',
       password: 'Pass1!',
     });
-    expect(sessionStorage.getItem('token')).toBe('register-token');
-    expect(JSON.parse(sessionStorage.getItem('user'))).toEqual(mockUser);
+    // Registration no longer auto-logs in; token should NOT be set
+    expect(sessionStorage.getItem('token')).toBeNull();
+    expect(screen.getByTestId('user')).toHaveTextContent('null');
   });
 
   // ==================== LOGOUT ====================

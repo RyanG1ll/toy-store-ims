@@ -10,10 +10,15 @@ jest.mock('react-router-dom', () => ({
   NavLink: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
   useLocation: () => ({ pathname: '/login' }),
   useNavigate: () => jest.fn(),
+  useSearchParams: () => [new URLSearchParams(), jest.fn()],
 }));
 
 // Mock all page components
 jest.mock('./pages/Auth/Login', () => () => <div data-testid="login-page">Login</div>);
+jest.mock('./pages/Auth/EmailVerification', () => () => <div data-testid="email-verification-page">EmailVerification</div>);
+jest.mock('./pages/Auth/ForgotPassword', () => () => <div data-testid="forgot-password-page">ForgotPassword</div>);
+jest.mock('./pages/Auth/ResetPassword', () => () => <div data-testid="reset-password-page">ResetPassword</div>);
+jest.mock('./pages/Account/AccountDetails', () => () => <div data-testid="account-details-page">AccountDetails</div>);
 jest.mock('./pages/Dashboard/Dashboard', () => () => <div data-testid="dashboard-page">Dashboard</div>);
 jest.mock('./pages/Products/Products', () => () => <div data-testid="products-page">Products</div>);
 jest.mock('./pages/Suppliers/Suppliers', () => () => <div data-testid="suppliers-page">Suppliers</div>);
