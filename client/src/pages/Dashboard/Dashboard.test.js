@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import Dashboard from './Dashboard';
 
-// Mock Recharts to avoid rendering issues in test environment
 jest.mock('recharts', () => ({
   PieChart: ({ children }) => <div data-testid="pie-chart">{children}</div>,
   Pie: () => null,
@@ -17,21 +16,17 @@ jest.mock('recharts', () => ({
   ResponsiveContainer: ({ children }) => <div>{children}</div>,
 }));
 
-// Mock AccessibilityContext
 jest.mock('../../context/AccessibilityContext', () => ({
   useAccessibility: () => ({ reducedMotion: false }),
 }));
 
-// Mock useDocumentTitle
 jest.mock('../../hooks/useDocumentTitle', () => jest.fn());
 
-// Mock LiveAnnouncer
 const mockAnnounce = jest.fn();
 jest.mock('../../components/LiveAnnouncer', () => ({
   useAnnounce: () => mockAnnounce,
 }));
 
-// Mock API — use a module-level variable via jest.fn() so hoisting works
 const mockGet = jest.fn();
 jest.mock('../../services/api', () => ({
   __esModule: true,
@@ -73,8 +68,6 @@ describe('Dashboard', () => {
     jest.clearAllMocks();
   });
 
-  // ==================== LOADING STATE ====================
-
   test('shows loading message while data is being fetched', () => {
     mockGet.mockReturnValue(new Promise(() => {})); // Never resolves
     render(<Dashboard />);
@@ -88,7 +81,7 @@ describe('Dashboard', () => {
     expect(loading).toHaveAttribute('aria-live', 'polite');
   });
 
-  // ==================== ERROR STATE ====================
+  // Error handling tests
 
   test('shows error message when API call fails', async () => {
     mockGet.mockRejectedValue(new Error('Network error'));
@@ -99,7 +92,7 @@ describe('Dashboard', () => {
     });
   });
 
-  // ==================== SUCCESSFUL DATA DISPLAY ====================
+  // Successful data display tests
 
   test('displays stat cards with correct values', async () => {
     mockGet.mockResolvedValue({ data: mockDashboardData });
@@ -160,7 +153,7 @@ describe('Dashboard', () => {
     });
   });
 
-  // ==================== CHART FILTERS ====================
+  // Chart filter tests
 
   test('renders chart filter buttons', async () => {
     mockGet.mockResolvedValue({ data: mockDashboardData });
@@ -201,7 +194,7 @@ describe('Dashboard', () => {
     expect(mockAnnounce).toHaveBeenCalledWith('Showing Stock charts only');
   });
 
-  // ==================== ACCESSIBILITY ====================
+  // Accessibility structure tests
 
   test('stats grid has region role with label', async () => {
     mockGet.mockResolvedValue({ data: mockDashboardData });

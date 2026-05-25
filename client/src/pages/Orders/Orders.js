@@ -19,8 +19,6 @@ function Orders() {
   const [showModal, setShowModal] = useState(false);
   const [statusFilter, setStatusFilter] = useState('all');
   const [supplierFilter, setSupplierFilter] = useState('all');
-
-  // Sort state: { column: string, direction: 'asc' | 'desc' | 'none' }
   const [sort, setSort] = useState({ column: null, direction: 'none' });
 
   // Get unique supplier names for the filter dropdown

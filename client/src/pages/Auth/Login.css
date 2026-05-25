@@ -123,7 +123,7 @@
   margin-top: 4px;
 }
 
-/* Toggle text: "Don't have an account? Create one" */
+/* Create account link */
 .login-toggle {
   text-align: center;
   margin-top: 20px;
@@ -131,7 +131,7 @@
   color: var(--muted, #666);
 }
 
-/* Make the link-button look like a text link, NOT a button */
+/* Make the link-button look like a text link*/
 .link-button {
   background: none !important;
   border: none !important;
@@ -173,7 +173,7 @@
   margin-bottom: 4px;
 }
 
-/* Info message (for resend verification feedback) */
+/* Resend verification info */
 .info-message {
   background: #e3f2fd;
   color: #0d47a1;
@@ -348,7 +348,7 @@
   background: var(--primary-hover, #3a7bb8);
 }
 
-/* Dark mode overrides */
+/* Dark mode */
 [data-theme="dark"] .login-card,
 [data-theme="dark"] .verification-card {
   background: var(--card-bg, #232731);
@@ -399,7 +399,7 @@
   background: #5a6068;
 }
 
-/* High contrast mode overrides */
+/* High contrast mode */
 [data-theme="high-contrast"] .login-card,
 [data-theme="high-contrast"] .verification-card {
   background: #000;

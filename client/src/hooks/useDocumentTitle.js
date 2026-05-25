@@ -1,18 +1,6 @@
 import { useEffect } from 'react';
 
-/**
- * useDocumentTitle — WCAG 2.2 SC 2.4.2 (Page Titled)
- *
- * Updates the browser tab title when a page mounts. Screen readers announce
- * the new title on route changes, which is essential for SPA navigation.
- *
- * Usage:
- *   useDocumentTitle('Dashboard — Toy Store IMS');
- *
- * The suffix " — Toy Store IMS" is appended automatically if not present,
- * so you can also just call:
- *   useDocumentTitle('Dashboard');
- */
+// Centralized hook to manage document titles across the app
 const APP_NAME = 'Toy Store IMS';
 
 export default function useDocumentTitle(title) {

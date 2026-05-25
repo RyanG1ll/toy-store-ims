@@ -71,12 +71,10 @@ function Tutorial({ onComplete }) {
           />
         </div>
 
-        {/* Step counter */}
         <div className="tutorial-step-count" aria-live="polite">
           Step {currentStep + 1} of {totalSteps}
         </div>
 
-        {/* Content */}
         <div className="tutorial-content">
           <div className="tutorial-icon" aria-hidden="true">{step.icon}</div>
           <h2 id="tutorial-title">{step.title}</h2>
@@ -91,7 +89,6 @@ function Tutorial({ onComplete }) {
           )}
         </div>
 
-        {/* Navigation buttons */}
         <div className="tutorial-actions">
           {!isFirst && (
             <button
@@ -120,7 +117,6 @@ function Tutorial({ onComplete }) {
           </button>
         </div>
 
-        {/* Step dots */}
         <div className="tutorial-dots" aria-hidden="true">
           {tutorialSteps.map((_, index) => (
             <span

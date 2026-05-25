@@ -57,7 +57,7 @@ function AccountDetails() {
     fetchProfile();
   }, []);
 
-  // Fetch audit log (admin only)
+  // Fetch audit log 
   const fetchAuditLog = useCallback(async (page = 1, action = '') => {
     setAuditLoading(true);
     try {
@@ -120,7 +120,7 @@ function AccountDetails() {
       const res = await api.post('/auth/check-password-strength', { password: value });
       setPasswordStrength(res.data);
     } catch {
-      // Fail silently
+
     }
   };
 
@@ -187,7 +187,6 @@ function AccountDetails() {
       ) : (
 
       <div className="account-content">
-        {/* Profile Card */}
         <section className="account-section" aria-labelledby="profile-heading">
           <h2 id="profile-heading">Profile Information</h2>
 
@@ -305,7 +304,6 @@ function AccountDetails() {
           )}
         </section>
 
-        {/* Password Change Form */}
         {showPasswordForm && (
           <section className="account-section" aria-labelledby="password-heading">
             <h2 id="password-heading">Change Password</h2>
@@ -369,8 +367,7 @@ function AccountDetails() {
             </form>
           </section>
         )}
-
-        {/* Admin Audit Log */}
+        
         {user?.role === 'admin' && (
           <section className="account-section audit-section" aria-labelledby="audit-heading">
             <h2 id="audit-heading">Activity Log</h2>

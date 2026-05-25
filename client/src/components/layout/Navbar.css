@@ -141,7 +141,7 @@
   vertical-align: middle;
 }
 
-/* Hamburger button — hidden on desktop */
+/* Hamburger button */
 .nav-hamburger {
   display: none;
   background: none;
@@ -190,7 +190,6 @@
   justify-content: center;
 }
 
-/* ============ RESPONSIVE — MOBILE NAV ============ */
 @media (max-width: 768px) {
   .navbar {
     position: relative;

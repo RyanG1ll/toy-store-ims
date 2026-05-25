@@ -15,9 +15,7 @@ const { logAuditEvent } = require('../utils/audit');
 const DUMMY_HASH = '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy';
 
 // This function validates password strength on the server side.
-// Returns an object with a boolean `valid` and an array of `errors`.
-// Requirements: >= 8 chars, uppercase, lowercase, digit, special character.
-// Additional checks can be added as needed (e.g., no common passwords, no sequences).
+// It checks for minimum length, presence of uppercase/lowercase letters, digits, and special characters.
 function checkPasswordStrength(password) {
   const errors = [];
   if (password.length < 8) errors.push('Password must be at least 8 characters');

@@ -23,7 +23,7 @@
   background: rgba(74, 144, 217, 0.1);
 }
 
-/* Selected / active state */
+/* Selected */
 .filter-btn.active,
 .filter-btn[aria-pressed="true"] {
   background: var(--primary, #4a90d9);

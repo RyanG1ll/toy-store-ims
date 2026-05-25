@@ -5,12 +5,12 @@ const api = axios.create({
   ///api
 });
 
-// Response interceptor - auto logout on expired token
+// Auto logout on expired token
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Token expired or invalid - clear session and redirect to login
+      // If token expired or invalid it clears session and redirect to login
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('user');
       delete api.defaults.headers.common['Authorization'];

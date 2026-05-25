@@ -90,7 +90,7 @@ function Navbar() {
 
 export default Navbar;
 
-//Use this for emoji notifications
+//Use this for emoji notifications (if needed)
 // {<NavLink to="/notifications" aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ''}`}>
 //           ✉️
           

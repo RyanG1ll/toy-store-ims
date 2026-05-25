@@ -1,14 +1,6 @@
 const pool = require('../config/db');
 
-/**
- * Logs a security-relevant event to the audit_log table.
- * Used for tracking logins, password changes, account updates, and other actions.
- *
- * @param {number|null} userId - The user performing the action (null for anonymous events)
- * @param {string} action - Short action identifier (e.g. 'LOGIN_SUCCESS', 'PASSWORD_CHANGE')
- * @param {string} detail - Human-readable description of what happened
- * @param {string|null} ipAddress - The IP address of the request (optional)
- */
+// Logs an audit event to the database. This function is designed to be non-blocking and should not throw errors, as audit logging should never interfere with the main application flow.
 async function logAuditEvent(userId, action, detail) {
   try {
     await pool.query(

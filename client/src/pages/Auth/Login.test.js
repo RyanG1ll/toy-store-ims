@@ -1,14 +1,11 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
-// Mock useNavigate before importing the component
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-// Mock AuthContext
 const mockLogin = jest.fn();
 const mockRegister = jest.fn();
 jest.mock('../../context/AuthContext', () => ({
@@ -18,7 +15,6 @@ jest.mock('../../context/AuthContext', () => ({
   }),
 }));
 
-// Mock API for direct registration calls
 const mockPost = jest.fn();
 jest.mock('../../services/api', () => ({
   __esModule: true,
@@ -30,7 +26,6 @@ jest.mock('../../services/api', () => ({
   },
 }));
 
-// Import after mocks
 const Login = require('./Login').default;
 
 function renderLogin() {
@@ -42,8 +37,6 @@ describe('Login Page', () => {
     jest.clearAllMocks();
     mockPost.mockReset();
   });
-
-  // ==================== RENDERING ====================
 
   test('renders sign in form by default', () => {
     renderLogin();
@@ -63,8 +56,6 @@ describe('Login Page', () => {
     expect(screen.getByText(/don't have an account/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /create one/i })).toBeInTheDocument();
   });
-
-  // ==================== FORM SWITCHING ====================
 
   test('switches to registration form when "Create one" is clicked', async () => {
     renderLogin();
@@ -103,7 +94,6 @@ describe('Login Page', () => {
     expect(screen.getByLabelText(/password/i)).toHaveValue('');
   });
 
-  // ==================== LOGIN VALIDATION ====================
 
   test('shows error when email/username is empty on login', async () => {
     renderLogin();
@@ -174,7 +164,7 @@ describe('Login Page', () => {
     });
   });
 
-  // ==================== REGISTRATION VALIDATION ====================
+  // Validation tests for registration form
 
   test('shows error when email format is invalid on registration', async () => {
     renderLogin();
@@ -217,7 +207,7 @@ describe('Login Page', () => {
     expect(screen.getByRole('alert')).toHaveTextContent(/password does not meet all requirements/i);
   });
 
-  // ==================== PASSWORD REQUIREMENTS CHECKLIST ====================
+  // Password requirements checklist tests
 
   test('shows password requirements checklist during registration', async () => {
     renderLogin();
@@ -269,7 +259,7 @@ describe('Login Page', () => {
     expect(screen.queryByText(/at least 8 characters/i)).not.toBeInTheDocument();
   });
 
-  // ==================== ACCESSIBILITY ====================
+  // Accessibility tests
 
   test('email/username input has correct type for login vs registration', async () => {
     renderLogin();
@@ -311,7 +301,7 @@ describe('Login Page', () => {
     expect(passwordInput).not.toHaveAttribute('aria-describedby');
   });
 
-  // ==================== SUCCESSFUL REGISTRATION ====================
+  // Successful registration flow test (API interaction)
 
   test('calls register with correct args and shows verification message on success', async () => {
     mockPost.mockResolvedValue({

@@ -36,7 +36,7 @@ function NotificationPopup() {
           setIsOpen(true);
         }
       } else {
-        // Subsequent polls — only show toasts for genuinely new notifications
+        // Only want to show toasts for new notifications
         const newOnes = unread.filter(n => !seenIdsRef.current.has(n.notification_id));
         if (newOnes.length > 0) {
           newOnes.forEach(n => seenIdsRef.current.add(n.notification_id));
@@ -55,7 +55,7 @@ function NotificationPopup() {
     return () => clearInterval(interval);
   }, [fetchUnread]);
 
-  // Auto-dismiss toasts after 6 seconds
+  // Dismisses toasts after 6 seconds
   useEffect(() => {
     if (toasts.length === 0) return;
     const timer = setTimeout(() => {

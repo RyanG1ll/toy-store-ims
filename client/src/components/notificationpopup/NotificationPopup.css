@@ -135,9 +135,6 @@
   opacity: 0.9;
 }
 
-/* ==========================================================================
-   DARK THEME overrides
-   ========================================================================== */
 [data-theme="dark"] .notification-popup {
   background: var(--card-bg, #232731);
   border-color: var(--border-color, #383d47);
@@ -181,9 +178,6 @@
   border-bottom-color: var(--border-color, #383d47);
 }
 
-/* ==========================================================================
-   HIGH CONTRAST overrides
-   ========================================================================== */
 [data-theme="high-contrast"] .notification-popup {
   background: #000;
   border: 2px solid #fff;
@@ -240,9 +234,6 @@
   border: 2px solid #fff;
 }
 
-/* ==========================================================================
-   TOAST NOTIFICATIONS (bottom-right, live)
-   ========================================================================== */
 .toast-container {
   position: fixed;
   top: 80px;
@@ -359,7 +350,8 @@
   outline-offset: -3px;
 }
 
-/* Toast — DARK THEME */
+/* Pop-up and Toast dark theme */
+
 [data-theme="dark"] .toast-notification {
   background: var(--card-bg, #232731);
   border-color: var(--border-color, #383d47);
@@ -388,7 +380,7 @@
   color: #f0f0f0;
 }
 
-/* Toast — HIGH CONTRAST */
+/* Pop-up and Toast high contrast */
 [data-theme="high-contrast"] .toast-notification {
   background: #000;
   border: 2px solid #fff;
@@ -429,7 +421,7 @@
   outline-color: #ffff00;
 }
 
-/* Toast — REDUCED MOTION */
+/* pop-up and toast reduced motion */
 [data-reduced-motion="true"] .toast-notification {
   animation: none;
 }

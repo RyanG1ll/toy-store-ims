@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-// Mock react-router-dom
 jest.mock('react-router-dom', () => ({
   BrowserRouter: ({ children }) => <div>{children}</div>,
   Routes: ({ children }) => <div>{children}</div>,
@@ -13,7 +12,6 @@ jest.mock('react-router-dom', () => ({
   useSearchParams: () => [new URLSearchParams(), jest.fn()],
 }));
 
-// Mock all page components
 jest.mock('./pages/Auth/Login', () => () => <div data-testid="login-page">Login</div>);
 jest.mock('./pages/Auth/EmailVerification', () => () => <div data-testid="email-verification-page">EmailVerification</div>);
 jest.mock('./pages/Auth/ForgotPassword', () => () => <div data-testid="forgot-password-page">ForgotPassword</div>);
@@ -31,7 +29,6 @@ jest.mock('./components/notificationpopup/NotificationPopup', () => () => null);
 jest.mock('./components/tutorial/Tutorial', () => () => null);
 jest.mock('./components/tutorial/WelcomePrompt', () => () => null);
 
-// Mock API
 jest.mock('./services/api', () => ({
   __esModule: true,
   default: {
@@ -52,7 +49,6 @@ describe('App', () => {
 
   test('renders without crashing', () => {
     render(<App />);
-    // App should render the main content area
     const main = document.getElementById('main-content');
     expect(main).toBeInTheDocument();
   });
@@ -64,10 +60,10 @@ describe('App', () => {
     expect(main).toHaveAttribute('role', 'main');
   });
 
+  // Navbar visibility tests
   test('does not show navbar when user is not logged in', () => {
     sessionStorage.removeItem('token');
     render(<App />);
-    // Navbar should not render because user is null
     expect(screen.queryByTestId('navbar')).not.toBeInTheDocument();
   });
 

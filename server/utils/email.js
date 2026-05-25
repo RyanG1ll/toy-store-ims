@@ -17,15 +17,9 @@ transporter.verify()
   .then(() => console.log('SMTP connection verified — email service is ready'))
   .catch((err) => console.error('SMTP connection failed:', err.message));
 
-/**
- * Sends a verification email to the user with a unique token link.
- * The link directs them to the client-side verification page which
- * then calls the backend API to confirm the token.
- *
- * @param {string} email - Recipient email address
- * @param {string} firstName - User's first name for personalisation
- * @param {string} token - Unique verification token
- */
+
+// Send a verification email to the user with a unique token link. The email is styled with inline CSS for better compatibility across email clients.
+// The verification URL includes the token as a query parameter, which the frontend can use to verify the user's email when they click the link.
 async function sendVerificationEmail(email, firstName, token) {
   const verificationUrl = `${process.env.CLIENT_URL}/verify-email?token=${token}`;
 

@@ -95,7 +95,7 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// PUT clear read notifications (soft-delete — only info severity; critical/warning stay visible)
+// PUT clear read notifications (soft-delete only info severity; critical/warning stay visible)
 router.put('/clear/read', auth, async (req, res) => {
   try {
     const result = await pool.query(

@@ -3,7 +3,7 @@ import { useEffect, useRef, useCallback } from 'react';
 //useFocusTrap — keeps keyboard focus inside a container (e.g. a modal).
  
 // WCAG 2.2 SC 2.4.3 (Focus Order) & SC 2.1.2 (No Keyboard Trap): Focus must stay inside dialogs while open, and Escape must always close them.
-// Implementation:
+
 // 1. On mount, saves the previously focused element, then focuses the container.
 // 2. Traps Tab / Shift+Tab within focusable children of the container.
 // 3. On unmount (modal close), returns focus to the element that was focused before.

@@ -2,9 +2,7 @@ import React from 'react';
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-// Mock API — define mock functions at module top level for jest.mock hoisting
 const mockPost = jest.fn();
-// We need a stable object for defaults.headers.common that the AuthContext can mutate
 const mockApi = {
   post: (...args) => mockPost(...args),
   get: jest.fn(),
@@ -16,10 +14,8 @@ jest.mock('../services/api', () => ({
   default: mockApi,
 }));
 
-// Import after mocks are defined
 const { AuthProvider, useAuth } = require('./AuthContext');
 
-// Test component that exposes AuthContext values
 function TestConsumer() {
   const { user, loading, login, register, logout } = useAuth();
   return (
@@ -51,8 +47,6 @@ describe('AuthContext', () => {
     });
   });
 
-  // ==================== INITIAL STATE ====================
-
   test('starts with null user and loading true, then loading becomes false', async () => {
     renderWithProvider();
     await waitFor(() => {
@@ -75,7 +69,7 @@ describe('AuthContext', () => {
     expect(mockApi.defaults.headers.common['Authorization']).toBe('Bearer saved-token');
   });
 
-  // ==================== LOGIN ====================
+  // login test should verify that the token and user are stored in sessionStorage, the auth header is set, and the user state is updated correctly
 
   test('login stores token and user in sessionStorage', async () => {
     const mockUser = { user_id: 1, username: 'testuser', role: 'staff' };
@@ -103,7 +97,9 @@ describe('AuthContext', () => {
     expect(screen.getByTestId('user')).toHaveTextContent(JSON.stringify(mockUser));
   });
 
-  // ==================== REGISTER ====================
+  // Register test should verify that the API is called with the correct data
+  // but since registration now requires email verification, it should NOT store a token or user in sessionStorage, 
+  // and the user state should remain null until verification is complete.
 
   test('register calls API but does not store token (requires email verification)', async () => {
     mockPost.mockResolvedValue({
@@ -132,7 +128,7 @@ describe('AuthContext', () => {
     expect(screen.getByTestId('user')).toHaveTextContent('null');
   });
 
-  // ==================== LOGOUT ====================
+  // Logout test should verify that sessionStorage is cleared, the auth header is removed, and the user state is reset to null
 
   test('logout clears sessionStorage and resets user', async () => {
     sessionStorage.setItem('token', 'existing-token');
@@ -155,7 +151,7 @@ describe('AuthContext', () => {
     expect(screen.getByTestId('user')).toHaveTextContent('null');
   });
 
-  // ==================== SESSION PERSISTENCE ====================
+  // Session restoration test should verify that if there is no token in sessionStorage, the auth header is not set and user remains null
 
   test('does not set auth header when no token in sessionStorage', async () => {
     renderWithProvider();

@@ -30,7 +30,6 @@ function ResetPassword() {
       const res = await api.post('/auth/check-password-strength', { password: value });
       setStrength(res.data);
     } catch {
-      // Fail silently
     }
   };
 

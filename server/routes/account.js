@@ -9,7 +9,7 @@ const { logAuditEvent } = require('../utils/audit');
 const { sendVerificationEmail } = require('../utils/email');
 const nodemailer = require('nodemailer');
 
-// ─── Helper: send password reset email ───
+// Sends a password reset email with a secure token. Uses nodemailer to send the email with a styled HTML template.
 async function sendPasswordResetEmail(email, firstName, token) {
   const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
 
@@ -60,7 +60,6 @@ async function sendPasswordResetEmail(email, firstName, token) {
   });
 }
 
-// ─── GET /api/account/me ───
 // Returns the authenticated user's profile details including timestamps.
 router.get('/me', auth, async (req, res) => {
   try {
@@ -80,7 +79,6 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
-// ─── PUT /api/account/me ───
 // Updates the authenticated user's profile (first name, last name, username, email).
 router.put('/me', auth,
   [
@@ -137,7 +135,6 @@ router.put('/me', auth,
   }
 );
 
-// ─── PUT /api/account/me/password ───
 // Changes the authenticated user's password. Requires current password for verification.
 router.put('/me/password', auth,
   [
@@ -217,7 +214,7 @@ router.post('/forgot-password',
       const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
       if (result.rows.length === 0) {
-        // User doesn't exist — return same generic message to prevent enumeration
+        // User doesn't exist and return same generic message
         return res.status(200).json({ message: genericMessage });
       }
 

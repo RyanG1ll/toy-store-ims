@@ -8,14 +8,14 @@ function WelcomePrompt({ onResponse }) {
   const trapRef = useFocusTrap(() => {});
 
   const handleYes = () => {
-    // User has used the system before — skip tutorial
+    // If user has used the system before it skips tutorial
     const key = user ? `tutorialCompleted_${user.user_id}` : 'tutorialCompleted';
     localStorage.setItem(key, 'true');
     onResponse(false);
   };
 
   const handleNo = () => {
-    // User is new — show tutorial
+    // If user is new it will show tutorial
     onResponse(true);
   };
 

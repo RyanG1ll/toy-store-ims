@@ -10,7 +10,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// Routes - these will be defined in separate files for better organization
+// Routes
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/categories', require('./routes/categories'));

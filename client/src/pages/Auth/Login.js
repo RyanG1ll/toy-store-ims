@@ -128,7 +128,7 @@ function Login() {
 
     try {
       if (isRegister) {
-        // Registration — send all fields including real names
+        // Registration
         const response = await api.post('/auth/register', {
           firstName: formData.firstName.trim(),
           lastName: formData.lastName.trim(),
@@ -150,7 +150,7 @@ function Login() {
       }
     } catch (err) {
       if (err.response?.status === 403 && err.response?.data?.requiresVerification) {
-        // Email not verified — show verification prompt
+        // If email is not verified it will show verification prompt
         setVerificationPending(true);
         setVerificationEmail(err.response.data.email);
         setError('Please verify your email address before logging in.');

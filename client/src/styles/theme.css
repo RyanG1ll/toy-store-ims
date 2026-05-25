@@ -1,6 +1,5 @@
 
 :root {
-  /* Colors (light theme defaults) */
   --bg: #f5f7fa;
   --text: #1a1f2e;
   --color-text: #1a1f2e;
@@ -25,7 +24,7 @@
   --shadow: 0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
   --shadow-lg: 0 4px 12px rgba(16, 24, 40, 0.1);
 
-  /* Spacing scale */
+  /* REMEMBER  */
   --spacing-xs: 0.25rem;   /*  4px */
   --spacing-sm: 0.5rem;    /*  8px */
   --spacing-md: 1rem;      /* 16px */
@@ -46,7 +45,6 @@
   --radius-sm: 6px;
 }
 
-/* Base */
 * { box-sizing: border-box; }
 
 body {
@@ -73,7 +71,6 @@ p { margin: 0 0 var(--spacing-md); }
 a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* Page container */
 .page,
 .dashboard,
 .products-page,
@@ -100,7 +97,6 @@ a:hover { text-decoration: underline; }
   margin-bottom: var(--spacing-xl);
 }
 
-/* Cards */
 .card,
 .chart-card,
 .stat-card,
@@ -112,7 +108,6 @@ a:hover { text-decoration: underline; }
   box-shadow: var(--shadow-sm);
 }
 
-/* Stat cards */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -146,7 +141,6 @@ a:hover { text-decoration: underline; }
 .stat-card.warning .stat-number { color: var(--warning); }
 .stat-card.danger .stat-number { color: var(--danger); }
 
-/* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -172,7 +166,6 @@ th {
 tbody tr { transition: background 0.1s; }
 tbody tr:hover { background: rgba(74, 144, 217, 0.04); }
 
-/* Buttons */
 button, .btn {
   padding: var(--spacing-sm) var(--spacing-md);
   border: none;
@@ -201,7 +194,6 @@ a:focus-visible, input:focus-visible, select:focus-visible {
 .btn-secondary:hover { background: rgba(74, 144, 217, 0.1); }
 .btn-danger { background: var(--danger); }
 
-/* Filter Buttons */
 .filter-bar,
 .chart-filters {
   display: flex;
@@ -227,7 +219,6 @@ a:focus-visible, input:focus-visible, select:focus-visible {
   color: #fff;
 }
 
-/* Forms */
 input, select, textarea {
   padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid var(--border-color);
@@ -245,7 +236,6 @@ input:focus, select:focus, textarea:focus {
 
 label { color: var(--text); font-weight: 500; }
 
-/* Status Badges */
 .status-badge {
   display: inline-block;
   padding: 4px 10px;
@@ -266,7 +256,6 @@ label { color: var(--text); font-weight: 500; }
   color: var(--low-stock-text) !important;
 }
 
-/* Charts Grid */
 .dashboard-charts,
 .charts-grid {
   display: grid;
@@ -275,19 +264,17 @@ label { color: var(--text); font-weight: 500; }
   margin-bottom: var(--spacing-xl);
 }
 
-/* FONT SIZE */
 [data-font-size="small"]  { font-size: 14px; }
 [data-font-size="medium"] { font-size: 16px; }
 [data-font-size="large"]  { font-size: 18px; }
 [data-font-size="xlarge"] { font-size: 20px; }
 
-/* PAGE ZOOM */
 [data-page-zoom="75"]  { zoom: 0.75; }
 [data-page-zoom="85"]  { zoom: 0.85; }
 [data-page-zoom="100"] { zoom: 1; }
 [data-page-zoom="115"] { zoom: 1.15; }
 
-/* DARK THEME */
+/* Dark Theme */
 [data-theme="dark"] {
   --bg: #15171c;
   --text: #f0f0f0;
@@ -352,7 +339,7 @@ label { color: var(--text); font-weight: 500; }
   color: #ffff00 !important;
 }
 
-/* HIGH CONTRAST */
+/* High Contrast */
 [data-theme="high-contrast"] {
   --bg: #000;
   --text: #fff;
@@ -381,7 +368,6 @@ label { color: var(--text); font-weight: 500; }
   background: #000 !important; color: #ffff00 !important; outline: 2px solid #ffff00;
 }
 
-/* Sort button inside table headers */
 .sort-btn {
   background: none;
   border: none;
@@ -407,7 +393,7 @@ label { color: var(--text); font-weight: 500; }
   color: #fff;
 }
 
-/* REDUCED MOTION */
+/* Reduced Motion */
 [data-reduced-motion="true"],
 [data-reduced-motion="true"] *,
 [data-reduced-motion="true"] *::before,
@@ -425,7 +411,7 @@ label { color: var(--text); font-weight: 500; }
   transition: none !important;
 }
 
-/* UNDERLINE LINKS */
+/* Underline Links */
 [data-underline-links="true"] a { text-decoration: underline !important; }
 
 /* Skip Link */
@@ -440,7 +426,6 @@ label { color: var(--text); font-weight: 500; }
 }
 .skip-link:focus { top: 0; }
 
-/* Responsive table wrapper — add .table-responsive around any <table> */
 .table-responsive {
   width: 100%;
   overflow-x: auto;

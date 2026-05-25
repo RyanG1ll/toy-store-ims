@@ -22,7 +22,7 @@ import SkipLink from './components/SkipLink';
 import Tutorial from './components/tutorial/Tutorial';
 import WelcomePrompt from './components/tutorial/WelcomePrompt';
 
-// Protected route wrapper, it redirects to login if not authenticated
+// Redirects to login if not authenticated
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return <p>Loading...</p>;
@@ -45,7 +45,6 @@ function AppContent() {
     }
   }, [user]);
 
-  // Listen for "Start Tutorial" button in Settings
   useEffect(() => {
     const handleStart = () => {
       setShowWelcome(false);
@@ -79,7 +78,7 @@ function AppContent() {
         </Routes>
       </main>
 
-      {/* Welcome prompt — asks new non-admin users if they've used the system */}
+      {/* Prompt aks new non-admin users if they've used the system */}
       {showWelcome && (
         <WelcomePrompt onResponse={(startTutorial) => {
           setShowWelcome(false);

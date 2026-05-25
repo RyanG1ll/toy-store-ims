@@ -1,7 +1,6 @@
 // Test the checkPasswordStrength function from the auth route.
-// We extract and re-implement the function here because it is defined
-// inside the auth module, which wires up Express routes on import.
-// This keeps the test isolated and avoids loading the full Express app.
+// This function checks if a password meets certain strength criteria, such as length, character types, and not being all the same character.
+// The tests cover various scenarios, including valid and invalid passwords, to ensure the function behaves as expected.
 
 function checkPasswordStrength(password) {
   const errors = [];

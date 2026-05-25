@@ -117,7 +117,6 @@
   white-space: nowrap;
 }
 
-/* Prevent button text from overflowing at large/extra-large text sizes */
 [data-font-size="large"] .btn-small,
 [data-font-size="xlarge"] .btn-small {
   font-size: 0.85rem;
@@ -153,7 +152,7 @@
   color: var(--text, #222);
 }
 
-/* Dark mode overrides */
+/* Dark mode */
 [data-theme="dark"] .products-page tr.low-stock,
 [data-theme="dark"] .products-page tr.low-stock td {
   background: #4a3e1a !important;
@@ -166,7 +165,7 @@
   border-color: var(--border-color, #444);
 }
 
-/* High contrast mode overrides */
+/* High contrast mode */
 [data-theme="high-contrast"] .products-page tr.low-stock,
 [data-theme="high-contrast"] .products-page tr.low-stock td {
   background: #000 !important;

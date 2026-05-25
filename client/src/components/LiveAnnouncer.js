@@ -1,21 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
-/**
- * LiveAnnouncer — WCAG 2.2 SC 4.1.3 (Status Messages)
- *
- * Provides a global aria-live region that screen readers will announce
- * when dynamic content changes occur (filters applied, items deleted,
- * forms submitted, etc.) without requiring a page reload.
- *
- * Usage:
- *   1. Wrap your app:    <LiveAnnouncerProvider> <App /> </LiveAnnouncerProvider>
- *   2. In any component: const announce = useAnnounce();
- *   3. Call it:          announce('Product deleted successfully');
- *
- * The announcer supports two politeness levels:
- *   announce('message')                  — polite (default, waits for idle)
- *   announce('message', 'assertive')     — assertive (interrupts, for errors/alerts)
- */
+// Provides a way to announce messages to screen readers for accessibility.
 
 const AnnounceContext = createContext(null);
 
@@ -58,7 +43,7 @@ export function LiveAnnouncerProvider({ children }) {
         {politeMessage}
       </div>
 
-      {/* Assertive live region — announced immediately (for errors) */}
+      {/* Assertive live region — announced immediately for errors */}
       <div
         role="alert"
         aria-live="assertive"

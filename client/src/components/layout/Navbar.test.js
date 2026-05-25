@@ -44,8 +44,6 @@ describe('Navbar', () => {
     window.confirm = jest.fn();
   });
 
-  // ==================== RENDERING ====================
-
   test('renders navigation bar with correct role and label', () => {
     renderNavbar();
     const nav = screen.getByRole('navigation', { name: /main navigation/i });
@@ -80,7 +78,7 @@ describe('Navbar', () => {
     expect(screen.getByText(/sign out/i)).toBeInTheDocument();
   });
 
-  // ==================== NAVIGATION LINKS ====================
+  // Navigation link tests
 
   test('navigation links have correct href attributes', () => {
     renderNavbar();
@@ -92,7 +90,7 @@ describe('Navbar', () => {
     expect(screen.getByText('Settings').closest('a')).toHaveAttribute('href', '/settings');
   });
 
-  // ==================== NOTIFICATION BADGE ====================
+  // Notification badge tests
 
   test('displays notification badge with unread count', async () => {
     renderNavbar();
@@ -108,7 +106,7 @@ describe('Navbar', () => {
     expect(messagesLink).toBeInTheDocument();
   });
 
-  // ==================== LOGOUT ====================
+  // Logout tests
 
   test('shows confirmation dialog before logging out', () => {
     window.confirm.mockReturnValue(false);
@@ -136,7 +134,7 @@ describe('Navbar', () => {
     expect(mockLogout).not.toHaveBeenCalled();
   });
 
-  // ==================== HAMBURGER MENU ====================
+  // Hamburger menu tests
 
   test('renders hamburger button with correct aria attributes', () => {
     renderNavbar();
@@ -173,7 +171,7 @@ describe('Navbar', () => {
     expect(document.getElementById('nav-menu')).not.toHaveClass('nav-menu--open');
   });
 
-  // ==================== ACCESSIBILITY ====================
+  // Accessibility tests
 
   test('nav links are inside a list for assistive tech', () => {
     renderNavbar();

@@ -1,4 +1,3 @@
-// Mock dependencies before importing the route
 jest.mock('../config/db', () => ({
   query: jest.fn(),
 }));
@@ -18,7 +17,6 @@ const pool = require('../config/db');
 const { logAuditEvent } = require('../utils/audit');
 const { sendVerificationEmail } = require('../utils/email');
 
-// Set environment variables before importing routes
 process.env.JWT_SECRET = 'test-secret-key';
 process.env.CLIENT_URL = 'http://localhost:3000';
 
@@ -41,7 +39,7 @@ describe('Auth Routes — Registration Logic', () => {
     // Simulate existing user found
     pool.query.mockResolvedValue({ rows: [{ user_id: 1 }] });
 
-    // We test the logic by checking what the pool receives
+    // Test the logic by checking what we have in the database after "registration"
     // This validates the duplicate-check query runs correctly
     const existingCheck = await pool.query(
       'SELECT * FROM users WHERE email = $1 OR username = $2',

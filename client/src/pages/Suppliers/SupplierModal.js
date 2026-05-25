@@ -17,7 +17,7 @@ function SupplierModal({ supplier, onClose, onSave }) {
   });
   const [errors, setErrors] = useState({});
 
-  // Focus trap: traps Tab inside the modal and returns focus on close
+  // Focus trap traps Tab inside the modal and returns focus on close
   const trapRef = useFocusTrap(onClose);
   const announce = useAnnounce();
 

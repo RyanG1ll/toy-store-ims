@@ -86,9 +86,9 @@ const educationalContent = {
   orderingCost: {
     term: 'Ordering Cost',
     short: 'The estimated annual cost of placing orders with suppliers.',
-    detailed: 'Every time you place an order, there are costs involved: staff time processing the order, communication with the supplier, shipping fees, receiving and inspecting goods, and handling invoices. The annual ordering cost depends on how many orders you place per year. Ordering more frequently increases this cost, while ordering larger quantities less often reduces it — but increases holding costs.',
+    detailed: 'Every time you place an order, there are costs involved: staff time processing the order, communication with the supplier, shipping fees, receiving and inspecting goods, and handling invoices. The annual ordering cost depends on how many orders you place per year. Ordering more frequently increases this cost, while ordering larger quantities less often reduces it - but increases holding costs.',
     example: 'If it costs £15 to place and process each order and you order 20 times per year, your annual ordering cost is £300. The EOQ formula helps you find the sweet spot.',
-    realWorld: 'Many businesses try to consolidate orders from the same supplier to reduce ordering costs — ordering multiple products in one delivery rather than placing separate orders.'
+    realWorld: 'Many businesses try to consolidate orders from the same supplier to reduce ordering costs, i.e., ordering multiple products in one delivery rather than placing separate orders.'
   },
   estDemand: {
     term: 'Estimated Demand',
