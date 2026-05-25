@@ -158,6 +158,16 @@ The PostgreSQL database uses the following tables:
 - **notifications** — System-generated alerts (low stock, order updates)
 - **audit_log** — Security and activity event log (logins, data changes, password events)
 
+## Educational Features
+
+The system embeds learning support throughout the interface to help non-technical users build confidence with inventory management:
+
+- Guided Tutorial — interactive walkthrough on first login, replayable from Settings
+- Contextual Tooltips — plain-language explanations of EOQ, reorder points, safety stock, lead time, and other concepts with toy-store-specific examples
+- Forecasting Education— each metric on the Forecasting page includes a tooltip explaining what it means, why it matters, and how it was calculated
+- Inline Guidance — descriptive labels, validation feedback, and placeholder text guide users through tasks
+- Password Strength Meter — real-time colour-coded feedback helps users create secure passwords
+
 ## Security Features
 
 - JWT-based authentication with 24-hour token expiry
