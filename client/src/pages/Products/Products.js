@@ -165,10 +165,10 @@ function Products() {
           </tr>
         </thead>
         <tbody>
-          {products.length === 0 ? (
+          {products.filter(p => chartCategory === 'all' || p.category_name === chartCategory).length === 0 ? (
             <tr><td colSpan="7">No products found.</td></tr>
           ) : (
-            products.map((product) => (
+            products.filter(p => chartCategory === 'all' || p.category_name === chartCategory).map((product) => (
                 // If the product's quantity in stock is less than or equal to the reorder level, apply a "low-stock" class for styling
               <tr key={product.product_id}
                   className={product.quantity_in_stock <= product.reorder_level ? 'low-stock' : ''}>
