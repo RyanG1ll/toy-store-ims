@@ -156,7 +156,7 @@ function Orders() {
   return (
     <div className="orders-page">
       <div className="orders-header">
-        <h1>Orders <Tooltip content={educationalContent.leadTime} /></h1>
+        <h1>Orders</h1>
         <button className="btn btn-primary" onClick={() => setShowModal(true)}>
           + New Order
         </button>

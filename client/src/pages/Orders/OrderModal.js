@@ -39,6 +39,19 @@ function OrderModal({ onClose, onSave }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // When supplier changes, clear any selected products that don't belong to the new supplier
+    if (name === 'supplier_id') {
+      setItems((prev) =>
+        prev.map((item) => {
+          const product = products.find((p) => p.product_id === parseInt(item.product_id));
+          if (product && product.supplier_id !== parseInt(value)) {
+            return { product_id: '', quantity: '', unit_cost: '' };
+          }
+          return item;
+        })
+      );
+    }
   };
 
   const handleItemChange = (index, field, value) => {
@@ -166,10 +179,13 @@ function OrderModal({ onClose, onSave }) {
                 <div className="form-group">
                   <label htmlFor={`product-${index}`}>Product</label>
                   <select id={`product-${index}`} value={item.product_id}
-                          onChange={(e) => handleItemChange(index, 'product_id', e.target.value)}>
-                    <option value="">Select product</option>
-                    {products.map((prod) => (
-                      <option key={prod.product_id} value={prod.product_id}>{prod.name}</option>
+                          onChange={(e) => handleItemChange(index, 'product_id', e.target.value)}
+                          disabled={!formData.supplier_id}>
+                    <option value="">{formData.supplier_id ? 'Select product' : 'Select a supplier first'}</option>
+                    {products
+                      .filter((prod) => prod.supplier_id === parseInt(formData.supplier_id))
+                      .map((prod) => (
+                        <option key={prod.product_id} value={prod.product_id}>{prod.name}</option>
                     ))}
                   </select>
                 </div>
