@@ -184,12 +184,26 @@ router.put('/:id/status', auth, async (req, res) => {
         );
       }
 
-        // Check for low stock after delivery update
+        // Check for low stock only on products from this order
         const lowStockCheck = await pool.query(
-          `SELECT name, quantity_in_stock, reorder_level FROM products 
-           WHERE is_active = TRUE AND quantity_in_stock <= reorder_level`
+          `SELECT DISTINCT p.name, p.quantity_in_stock, p.reorder_level
+           FROM products p
+           JOIN order_items oi ON oi.product_id = p.product_id
+           WHERE oi.order_id = $1
+             AND p.is_active = TRUE
+             AND p.quantity_in_stock <= p.reorder_level`,
+          [req.params.id]
         );
         for (const product of lowStockCheck.rows) {
+          // Skip if a low_stock notification already exists for this product (read or unread)
+          const existing = await pool.query(
+            `SELECT 1 FROM notifications
+             WHERE type = 'low_stock' AND is_cleared = FALSE
+             AND message LIKE $1 LIMIT 1`,
+            [`${product.name}:%`]
+          );
+          if (existing.rows.length > 0) continue;
+
           const severity = product.quantity_in_stock === 0 ? 'critical' : 'warning';
           await createNotification(
             'low_stock',
