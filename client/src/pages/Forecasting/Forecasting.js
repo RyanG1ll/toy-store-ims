@@ -161,7 +161,7 @@ function Forecasting() {
                           <div className="forecast-metric">
                             <dt className="metric-label">
                               Stock Level
-                              <Tooltip content={educationalContent.reorderPoint} />
+                              <Tooltip content={educationalContent.stockMovement} />
                             </dt>
                             <dd className={`metric-value ${f.stock_status === 'low' || f.stock_status === 'out_of_stock' ? 'critical' : ''}`}>
                               {f.current_stock} units

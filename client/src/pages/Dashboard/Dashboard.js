@@ -99,7 +99,8 @@ function Dashboard() {
       <div className="dashboard-charts">
         {(chartFilter === 'all' || chartFilter === 'stock') && (
           <div className="chart-card" role="figure"
-               aria-label={`Pie chart showing stock distribution across ${stats.stockByCategory?.length || 0} categories`}>
+               aria-label={`Pie chart showing stock distribution across ${stats.stockByCategory?.length || 0} categories`}
+               aria-describedby="chart-summary-stock-category">
             <h2>
               Stock by Category
             </h2>
@@ -126,15 +127,16 @@ function Dashboard() {
               </ResponsiveContainer>
             ) : <p>No stock data yet.</p>}
             {/* Screen reader text summary of chart data */}
-            <div className="sr-only">
+            <p id="chart-summary-stock-category" className="sr-only">
               Stock by category: {stats.stockByCategory?.map(c => `${c.category}: ${c.total_stock} units`).join(', ')}
-            </div>
+            </p>
           </div>
         )}
 
         {(chartFilter === 'all' || chartFilter === 'orders') && (
           <div className="chart-card" role="figure"
-               aria-label="Bar chart showing orders placed per month over the last 6 months">
+               aria-label="Bar chart showing orders placed per month over the last 6 months"
+               aria-describedby="chart-summary-orders-time">
             <h2>
               Orders Over Time
             </h2>
@@ -150,14 +152,15 @@ function Dashboard() {
                 </BarChart>
               </ResponsiveContainer>
             ) : <p>No order history yet.</p>}
-            <div className="sr-only">
+            <p id="chart-summary-orders-time" className="sr-only">
               Orders over time: {stats.ordersOverTime?.map(o => `${o.month}: ${o.order_count} orders`).join(', ')}
-            </div>
+            </p>
           </div>
         )}
 
         <div className="chart-card" role="figure"
-             aria-label="Donut chart showing stock health breakdown: healthy, low stock, and out of stock products">
+             aria-label="Donut chart showing stock health breakdown: healthy, low stock, and out of stock products"
+             aria-describedby="chart-summary-stock-status">
           <h2>
             Stock Status
           </h2>
@@ -188,11 +191,11 @@ function Dashboard() {
               </PieChart>
             </ResponsiveContainer>
           ) : <p>No stock data.</p>}
-          <div className="sr-only">
+          <p id="chart-summary-stock-status" className="sr-only">
             Stock status: {stats.stockStatusBreakdown?.healthy || 0} healthy,
             {' '}{stats.stockStatusBreakdown?.low_stock || 0} low stock,
             {' '}{stats.stockStatusBreakdown?.out_of_stock || 0} out of stock.
-          </div>
+          </p>
         </div>
       </div>
 
